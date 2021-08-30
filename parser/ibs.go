@@ -61,9 +61,9 @@ var evtMasks = map[string]uint8{
 	evtDin:    uint8(1 << bitDin),
 }
 
-func (pkt Packet) ibs() bool {
+func (pkt Payload) ibs() bool {
 	if mfg, ok := pkt.VendorCode(); ok {
-		msd := pkt.adv.ManufacturerData()
+		msd := pkt.packet.ManufacturerData()
 		code := binary.LittleEndian.Uint16(msd[2:4])
 		if mfg == 0x59 && code == 0xBC80 {
 			// iBS01(H/G/T)
@@ -98,7 +98,7 @@ func (pkt Packet) ibs() bool {
 	return false
 }
 
-func (pkt Packet) ibs01() bool {
+func (pkt Payload) ibs01() bool {
 	if mfg, ok := pkt.VendorCode(); ok {
 		msd := pkt.ManufacturerData()
 		typ := binary.LittleEndian.Uint16(msd[2:4])
@@ -106,22 +106,22 @@ func (pkt Packet) ibs01() bool {
 			subtype := uint8(msd[13])
 			if subtype == 0xff || subtype == 0x00 {
 				// old firmware without subtype
-				pkt.msd[fieldVendor] = knownVendorCode[IngicsVendorCode]
+				pkt.msdata[fieldVendor] = knownVendorCode[IngicsVendorCode]
 				pkt.handleFloatField(fieldBattery, 4)
 				if len(msd) > 7 && msd[7] != 0xFF && msd[8] != 0xFF {
 					// has temperature value, should be iBS01T
-					pkt.msd[fieldModel] = "iBS01T"
+					pkt.msdata[fieldModel] = "iBS01T"
 					pkt.handleFloatField(fieldTemperature, 7)
 					pkt.handleIntField(fieldHumidity, 9)
 				} else {
 					// others, cannot detect the 'read' model from payload
 					// list all possible sensor fields
 					flags := uint8(msd[6])
-					pkt.msd[fieldModel] = "iBS01"
-					pkt.msd[evtButton] = flags&evtMasks[evtButton] != 0
-					pkt.msd[evtMoving] = flags&evtMasks[evtMoving] != 0
-					pkt.msd[evtHall] = flags&evtMasks[evtHall] != 0
-					pkt.msd[evtFall] = flags&evtMasks[evtFall] != 0
+					pkt.msdata[fieldModel] = "iBS01"
+					pkt.msdata[evtButton] = flags&evtMasks[evtButton] != 0
+					pkt.msdata[evtMoving] = flags&evtMasks[evtMoving] != 0
+					pkt.msdata[evtHall] = flags&evtMasks[evtHall] != 0
+					pkt.msdata[evtFall] = flags&evtMasks[evtFall] != 0
 				}
 				return true
 			} else {
@@ -132,36 +132,36 @@ func (pkt Packet) ibs01() bool {
 	return false
 }
 
-func (pkt Packet) handleIntField(name string, index int) int {
+func (pkt Payload) handleIntField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
 	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
-		pkt.msd[name] = int16(unsignedValue)
+		pkt.msdata[name] = int16(unsignedValue)
 	}
 	return index + 2
 }
 
-func (pkt Packet) handleUintField(name string, index int) int {
+func (pkt Payload) handleUintField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
 	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
-		pkt.msd[name] = unsignedValue
+		pkt.msdata[name] = unsignedValue
 	}
 	return index + 2
 }
 
-func (pkt Packet) handleFloatField(name string, index int) int {
+func (pkt Payload) handleFloatField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
 	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
-		pkt.msd[name] = float32(int16(unsignedValue)) / 100.0
+		pkt.msdata[name] = float32(int16(unsignedValue)) / 100.0
 	}
 	return index + 2
 }
 
-func (pkt Packet) handleAccelField(name string, index int) int {
+func (pkt Payload) handleAccelField(name string, index int) int {
 	msd := pkt.ManufacturerData()
-	pkt.msd[name] = AccelReading{
+	pkt.msdata[name] = AccelReading{
 		float32(int16(binary.LittleEndian.Uint16(msd[index:index+2]))) * 4 / 100,
 		float32(int16(binary.LittleEndian.Uint16(msd[index+2:index+4]))) * 4 / 100,
 		float32(int16(binary.LittleEndian.Uint16(msd[index+4:index+6]))) * 4 / 100,
@@ -169,9 +169,9 @@ func (pkt Packet) handleAccelField(name string, index int) int {
 	return index + 6
 }
 
-func (pkt Packet) handleAccelsField(name string, index int) int {
+func (pkt Payload) handleAccelsField(name string, index int) int {
 	msd := pkt.ManufacturerData()
-	pkt.msd[name] = []AccelReading{
+	pkt.msdata[name] = []AccelReading{
 		{
 			float32(int16(binary.LittleEndian.Uint16(msd[index:index+2]))) * 4 / 100,
 			float32(int16(binary.LittleEndian.Uint16(msd[index+2:index+4]))) * 4 / 100,
@@ -191,52 +191,52 @@ func (pkt Packet) handleAccelsField(name string, index int) int {
 	return index + 18
 }
 
-func (pkt Packet) handleByteField(name string, index int) int {
+func (pkt Payload) handleByteField(name string, index int) int {
 	msd := pkt.ManufacturerData()
-	pkt.msd[name] = uint8(msd[index])
+	pkt.msdata[name] = uint8(msd[index])
 	return index + 1
 }
 
-func (pkt Packet) handleReservedField(name string, index int) int {
+func (pkt Payload) handleReservedField(name string, index int) int {
 	return index + 1
 }
 
-func (pkt Packet) handleReserved2Field(name string, index int) int {
+func (pkt Payload) handleReserved2Field(name string, index int) int {
 	return index + 2
 }
 
-func (pkt Packet) handleGpField(name string, index int) int {
+func (pkt Payload) handleGpField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	pkt.msd[name] = float32(int16(unsignedValue)) / 50.0
+	pkt.msdata[name] = float32(int16(unsignedValue)) / 50.0
 	return index + 2
 }
 
 // special handler for RG models, two bytes present battery + events
 // if will fill value of battery, event value & events fields
-func (pkt Packet) handleBattActField(name string, index int) int {
+func (pkt Payload) handleBattActField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	value := binary.LittleEndian.Uint16(msd[index : index+2])
-	pkt.msd[fieldBattery] = float32(int32(value&0x00FFF)) / 100.0
+	pkt.msdata[fieldBattery] = float32(int32(value&0x00FFF)) / 100.0
 	events := uint8(value & 0xF000 >> 12)
-	pkt.msd[fieldEvents] = events
-	pkt.msd[evtButton] = (events & 0x02) != 0
-	pkt.msd[evtMoving] = (events & 0x01) != 0
+	pkt.msdata[fieldEvents] = events
+	pkt.msdata[evtButton] = (events & 0x02) != 0
+	pkt.msdata[evtMoving] = (events & 0x01) != 0
 	return index + 2
 }
 
 // special handler for RS events field
-func (pkt Packet) handleRsEventsField(name string, index int) int {
+func (pkt Payload) handleRsEventsField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	value := uint8(msd[index])
-	pkt.msd[fieldEvents] = value
-	pkt.msd[evtDin] = (value & 0x04) != 0
+	pkt.msdata[fieldEvents] = value
+	pkt.msdata[evtDin] = (value & 0x04) != 0
 	return 1
 }
 
 // special handler for RG models,
 // returns model name determine by mfg code and type
-func (pkt Packet) rgNaming() string {
+func (pkt Payload) rgNaming() string {
 	if mfg, ok := pkt.VendorCode(); ok {
 		msd := pkt.ManufacturerData()
 		typ := binary.LittleEndian.Uint16(msd[2:4])
@@ -410,7 +410,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 }
 
 // Parse the payload follow the input definition
-func (pkt Packet) parsePayload(def payloadDef) bool {
+func (pkt Payload) parsePayload(def payloadDef) bool {
 	// define field handlers
 	var fieldDefs = map[string]func(string, int) int{
 		fieldBattery:     pkt.handleFloatField,
@@ -433,9 +433,9 @@ func (pkt Packet) parsePayload(def payloadDef) bool {
 	}
 
 	if model, ok := def.model.(string); ok {
-		pkt.msd[fieldModel] = model
+		pkt.msdata[fieldModel] = model
 	} else if meth, ok := def.model.(func() string); ok {
-		pkt.msd[fieldModel] = meth()
+		pkt.msdata[fieldModel] = meth()
 	}
 	index := 4
 	for _, fieldName := range def.fields {
@@ -443,9 +443,9 @@ func (pkt Packet) parsePayload(def payloadDef) bool {
 			index = fieldMethod(fieldName, index)
 		}
 	}
-	if value, ok := pkt.msd[fieldEvents]; ok && len(def.events) > 0 {
+	if value, ok := pkt.msdata[fieldEvents]; ok && len(def.events) > 0 {
 		for _, evt := range def.events {
-			pkt.msd[evt] = value.(uint8)&evtMasks[evt] != 0
+			pkt.msdata[evt] = value.(uint8)&evtMasks[evt] != 0
 		}
 	}
 	return true
@@ -453,9 +453,9 @@ func (pkt Packet) parsePayload(def payloadDef) bool {
 
 // Parse the payload by checkout 'subtype' first
 // Will find definition by subtype in the input 'payloadDefs'
-func (pkt Packet) parsePayloadBySubtype(payloadDefs map[byte]payloadDef) bool {
+func (pkt Payload) parsePayloadBySubtype(payloadDefs map[byte]payloadDef) bool {
 	msd := pkt.ManufacturerData()
-	pkt.msd[fieldVendor] = knownVendorCode[IngicsVendorCode]
+	pkt.msdata[fieldVendor] = knownVendorCode[IngicsVendorCode]
 	subtype := uint8(msd[13])
 	if def, ok := payloadDefs[subtype]; ok {
 		return pkt.parsePayload(def)

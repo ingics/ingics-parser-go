@@ -1,4 +1,4 @@
-module github.com/timscchao/ingics-message-parser-go
+module github.com/timscchao/ibs-payload-parser-go
 
 go 1.13
 

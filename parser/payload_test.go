@@ -11,7 +11,7 @@ import (
 	"github.com/go-ble/ble/linux/adv"
 )
 
-func validateFieldFunc(t *testing.T, got *Packet, field string, want interface{}) {
+func validateFieldFunc(t *testing.T, got *Payload, field string, want interface{}) {
 	t.Run(field, func(t *testing.T) {
 		if meth := reflect.ValueOf(got).MethodByName(field); meth.IsValid() {
 			out := meth.Call(nil)
@@ -53,8 +53,8 @@ func TestParseBlePayload_IBeacon(t *testing.T) {
 	t.Run("Packet", func(t *testing.T) {
 		uuid, _ := ble.Parse("E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")
 		want, _ := adv.NewPacket(adv.Flags(6), adv.IBeacon(uuid, 0, 0, -59))
-		if !reflect.DeepEqual(&got.adv, want) {
-			t.Errorf("adv.Packet = %v, want %v", &got.adv, want)
+		if !reflect.DeepEqual(&got.packet, want) {
+			t.Errorf("adv.Packet = %v, want %v", &got.packet, want)
 		}
 	})
 	validateFieldFunc(t, got, "Vendor", "Apple, Inc.")
