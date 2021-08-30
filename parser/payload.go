@@ -3,6 +3,7 @@ package parser
 import (
 	"encoding/binary"
 	"fmt"
+	"strings"
 
 	"github.com/go-ble/ble"
 	"github.com/go-ble/ble/linux/adv"
@@ -223,36 +224,8 @@ func (payload Payload) Accels() (reading []AccelReading, ok bool) {
 // Stringer interface for Payload
 func (payload Payload) String() string {
 	var x []string
-	if vendor, ok := payload.Vendor(); ok {
-		x = append(x, vendor)
+	for k, v := range payload.msdata {
+		x = append(x, fmt.Sprintf("%v: %v", k, v))
 	}
-	if model, ok := payload.ProductModel(); ok {
-		x = append(x, model)
-	}
-	fieldList := []string{
-		fieldBattery,
-		fieldTemperature,
-		fieldTempExt,
-		fieldHumidity,
-		fieldRange,
-		fieldCounter,
-		fieldCO2,
-		fieldGP,
-		fieldUserData,
-		fieldAccel,
-		fieldAccels,
-		evtButton,
-		evtHall,
-		evtFall,
-		evtMoving,
-		evtIR,
-		evtPIR,
-		evtDin,
-	}
-	for _, f := range fieldList {
-		if v, ok := payload.msdata[f]; ok {
-			x = append(x, fmt.Sprintf("%v: %v", f, v))
-		}
-	}
-	return fmt.Sprintf("%v\n", x)
+	return fmt.Sprintf("{\n\t%v\n}", strings.Join(x, "\n\t"))
 }
