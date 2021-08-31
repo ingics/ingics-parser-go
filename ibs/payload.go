@@ -138,28 +138,44 @@ func (payload Payload) TemperatureExt() (value float32, ok bool) {
 }
 
 // Return humidity sensor reading (in %)
-func (payload Payload) Humidity() (value int16, ok bool) {
-	return payload.readingInt(fieldHumidity)
+func (payload Payload) Humidity() (value int, ok bool) {
+	if v, ok := payload.readingInt(fieldHumidity); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
 }
 
 // Return range sensor reading (in %)
-func (payload Payload) Range() (value int16, ok bool) {
-	return payload.readingInt(fieldRange)
+func (payload Payload) Range() (value int, ok bool) {
+	if v, ok := payload.readingInt(fieldRange); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
 }
 
 // Return GP sensor reading
-func (payload Payload) GP() (value uint16, ok bool) {
-	return payload.readingUint(fieldGP)
+func (payload Payload) GP() (value float32, ok bool) {
+	return payload.readingFloat(fieldGP)
 }
 
 // Return sensor triggered counter
-func (payload Payload) Counter() (value uint16, ok bool) {
-	return payload.readingUint(fieldCounter)
+func (payload Payload) Counter() (value int, ok bool) {
+	if v, ok := payload.readingUint(fieldCounter); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
 }
 
 // Return CO2 sensor reading (in ppm)
-func (payload Payload) CO2() (value uint16, ok bool) {
-	return payload.readingUint(fieldCO2)
+func (payload Payload) CO2() (value int, ok bool) {
+	if v, ok := payload.readingUint(fieldCO2); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
 }
 
 // Return event stat
@@ -227,5 +243,5 @@ func (payload Payload) String() string {
 	for k, v := range payload.msdata {
 		x = append(x, fmt.Sprintf("%v: %v", k, v))
 	}
-	return fmt.Sprintf("{\n\t%v\n}", strings.Join(x, "\n\t"))
+	return fmt.Sprintf("{ %v }", strings.Join(x, ", "))
 }

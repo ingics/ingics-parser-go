@@ -106,7 +106,7 @@ func TestParse_IBS01T_Old(t *testing.T) {
 	validateFieldFunc(t, got, "ProductModel", "iBS01T")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.55))
 	validateFieldFunc(t, got, "Temperature", float32(34.50))
-	validateFieldFunc(t, got, "Humidity", int16(67))
+	validateFieldFunc(t, got, "Humidity", 67)
 }
 
 func TestParse_IBS01H_Old(t *testing.T) {
@@ -132,7 +132,7 @@ func TestParse_IBS01T_New(t *testing.T) {
 	validateFieldFunc(t, got, "ProductModel", "iBS01T")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.02))
 	validateFieldFunc(t, got, "Temperature", float32(-13.45))
-	validateFieldFunc(t, got, "Humidity", int16(57))
+	validateFieldFunc(t, got, "Humidity", 57)
 }
 
 func TestParse_IBS02IR(t *testing.T) {
@@ -149,7 +149,7 @@ func TestParse_IBS02IR_counter(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS02IR2")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.33))
-	validateFieldFunc(t, got, "Counter", uint16(5))
+	validateFieldFunc(t, got, "Counter", 5)
 	validateFieldFunc(t, got, "IRDetected", true)
 }
 
@@ -176,7 +176,7 @@ func TestParse_iBS02M2_counter(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC240100AAAA37060000040B0600")
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS02M2")
-	validateFieldFunc(t, got, "Counter", uint16(1591))
+	validateFieldFunc(t, got, "Counter", 1591)
 	validateFieldFunc(t, got, "IRDetected", nil)
 	validateFieldFunc(t, got, "DinTriggered", false)
 	validateFieldFunc(t, got, "ButtonPressed", nil)
@@ -197,7 +197,7 @@ func TestParse_IBS03T_RH(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS03T")
 	validateFieldFunc(t, got, "Temperature", float32(29.78))
-	validateFieldFunc(t, got, "Humidity", int16(71))
+	validateFieldFunc(t, got, "Humidity", 71)
 	validateFieldFunc(t, got, "ButtonPressed", false)
 }
 
@@ -228,7 +228,7 @@ func TestParse_IBS03R(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS03R")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
-	validateFieldFunc(t, got, "Range", int16(114))
+	validateFieldFunc(t, got, "Range", 114)
 	validateFieldFunc(t, got, "Temperature", nil)
 }
 
@@ -254,6 +254,7 @@ func TestParse_IBS03GP(t *testing.T) {
 		{float32(16 * 0.04), float32(58 * 0.04), float32(-164 * 0.04)},
 	})
 	validateFieldFunc(t, got, "Moving", true)
+	validateFieldFunc(t, got, "GP", float32(1012.98))
 }
 
 func TestParse_IBS04(t *testing.T) {
@@ -305,6 +306,7 @@ func TestParse_IBS05CO2(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS05CO2")
 	validateFieldFunc(t, got, "Temperature", nil)
+	validateFieldFunc(t, got, "CO2", 1128)
 }
 
 func TestParse_IBS06(t *testing.T) {

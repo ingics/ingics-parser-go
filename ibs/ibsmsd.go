@@ -208,7 +208,7 @@ func (pkt Payload) handleReserved2Field(name string, index int) int {
 func (pkt Payload) handleGpField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	pkt.msdata[name] = float32(int16(unsignedValue)) / 50.0
+	pkt.msdata[name] = float32(unsignedValue) / 50.0
 	return index + 2
 }
 
