@@ -1,2 +1,5 @@
-# ingics-message-parser-go
-Ingics sensor beacon payload parser and beacon gateway message parser
+# ingics-parser-go
+
+Payload and message parser library for INGICS BLE beacons (iBS Series) and BLE gateways (iGS Series).
+
+
