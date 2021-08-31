@@ -1,4 +1,4 @@
-package parser
+package ibs
 
 // Map of known MFD codes
 var knownVendorCode = map[uint16]string{

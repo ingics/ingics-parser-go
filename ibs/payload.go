@@ -1,4 +1,4 @@
-package parser
+package ibs
 
 import (
 	"encoding/binary"
@@ -19,7 +19,7 @@ type Payload struct {
 
 // Parser entry
 // Input payload ([]byte) and returns the Payload instense
-func ParseBlePayload(bytes []byte) *Payload {
+func Parse(bytes []byte) *Payload {
 	pkt := adv.NewRawPacket(bytes)
 	payload := Payload{*pkt, map[string]interface{}{}}
 	payload.ibs() // call ibs parser

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/timscchao/ingics-parser-go/parser"
+	"github.com/timscchao/ingics-parser-go/ibs"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 
 	for _, payloadHex := range os.Args[1:] {
 		if payloadBytes, err := hex.DecodeString(payloadHex); err == nil {
-			payload := parser.ParseBlePayload(payloadBytes)
+			payload := ibs.Parse(payloadBytes)
 			fmt.Println(payload)
 		} else {
 			fmt.Printf("Invalid hex string: %v", payloadHex)

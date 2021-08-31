@@ -1,4 +1,4 @@
-package parser
+package ibs
 
 import (
 	"encoding/binary"
