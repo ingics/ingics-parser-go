@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/timscchao/ibs-payload-parser-go/parser"
+	"github.com/timscchao/ingics-parser-go/parser"
 )
 
 func main() {
