@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/timscchao/ingics-parser-go/ibs"
+	"github.com/ingics/ingics-parser-go/ibs"
 )
 
 func main() {
