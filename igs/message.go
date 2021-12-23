@@ -17,7 +17,7 @@ func Parse(s string) *Message {
 	// clone string and create message
 	b := make([]byte, len(s))
 	copy(b, s)
-	m := &Message{*(*string)(unsafe.Pointer(&b))}
+	m := &Message{strings.TrimSpace(*(*string)(unsafe.Pointer(&b)))}
 	// validation
 	if m.validate() {
 		return m

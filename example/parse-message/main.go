@@ -34,5 +34,6 @@ func main() {
 		}
 	} else {
 		fmt.Println("Error: Invalid input message")
+		fmt.Println(os.Args[1])
 	}
 }
