@@ -86,7 +86,7 @@ func (m Message) Timestamp() *time.Time {
 		} else {
 			sec, _ = strconv.Atoi(y[0])
 		}
-		t := time.Unix(int64(sec), int64(msec*1000))
+		t := time.Unix(int64(sec), int64(msec*1000000))
 		return &t
 	}
 	return nil
