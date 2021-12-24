@@ -7,9 +7,9 @@ import (
 const IngicsVendorCode = 0x082C
 
 type AccelReading struct {
-	x float32
-	y float32
-	z float32
+	X int16
+	Y int16
+	Z int16
 }
 
 const (
@@ -162,9 +162,9 @@ func (pkt Payload) handleFloatField(name string, index int) int {
 func (pkt Payload) handleAccelField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	pkt.msdata[name] = AccelReading{
-		float32(int16(binary.LittleEndian.Uint16(msd[index:index+2]))) * 4 / 100,
-		float32(int16(binary.LittleEndian.Uint16(msd[index+2:index+4]))) * 4 / 100,
-		float32(int16(binary.LittleEndian.Uint16(msd[index+4:index+6]))) * 4 / 100,
+		int16(binary.LittleEndian.Uint16(msd[index : index+2])),
+		int16(binary.LittleEndian.Uint16(msd[index+2 : index+4])),
+		int16(binary.LittleEndian.Uint16(msd[index+4 : index+6])),
 	}
 	return index + 6
 }
@@ -173,19 +173,19 @@ func (pkt Payload) handleAccelsField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	pkt.msdata[name] = []AccelReading{
 		{
-			float32(int16(binary.LittleEndian.Uint16(msd[index:index+2]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+2:index+4]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+4:index+6]))) * 4 / 100,
+			int16(binary.LittleEndian.Uint16(msd[index : index+2])),
+			int16(binary.LittleEndian.Uint16(msd[index+2 : index+4])),
+			int16(binary.LittleEndian.Uint16(msd[index+4 : index+6])),
 		},
 		{
-			float32(int16(binary.LittleEndian.Uint16(msd[index+6:index+8]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+8:index+10]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+10:index+12]))) * 4 / 100,
+			int16(binary.LittleEndian.Uint16(msd[index+6 : index+8])),
+			int16(binary.LittleEndian.Uint16(msd[index+8 : index+10])),
+			int16(binary.LittleEndian.Uint16(msd[index+10 : index+12])),
 		},
 		{
-			float32(int16(binary.LittleEndian.Uint16(msd[index+12:index+14]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+14:index+16]))) * 4 / 100,
-			float32(int16(binary.LittleEndian.Uint16(msd[index+16:index+18]))) * 4 / 100,
+			int16(binary.LittleEndian.Uint16(msd[index+12 : index+14])),
+			int16(binary.LittleEndian.Uint16(msd[index+14 : index+16])),
+			int16(binary.LittleEndian.Uint16(msd[index+16 : index+18])),
 		},
 	}
 	return index + 18

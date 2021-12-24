@@ -207,11 +207,7 @@ func TestParse_IBS03RG(t *testing.T) {
 	validateFieldFunc(t, got, "ProductModel", "iBS03RG")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.18))
 	validateFieldFunc(t, got, "Moving", true)
-	validateFieldFunc(t, got, "Accels", []AccelReading{
-		{float32(10 * 0.04), float32(-12 * 0.04), float32(-256 * 0.04)},
-		{float32(22 * 0.04), float32(-10 * 0.04), float32(-256 * 0.04)},
-		{float32(20 * 0.04), float32(-10 * 0.04), float32(-248 * 0.04)},
-	})
+	validateFieldFunc(t, got, "Accels", []AccelReading{{10, -12, -256}, {22, -10, -256}, {20, -10, -248}})
 }
 
 func TestParse_IBS03TP(t *testing.T) {
@@ -248,11 +244,7 @@ func TestParse_IBS03GP(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS03GP")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.05))
-	validateFieldFunc(t, got, "Accels", []AccelReading{
-		{float32(22 * 0.04), float32(-126 * 0.04), float32(-354 * 0.04)},
-		{float32(78 * 0.04), float32(18 * 0.04), float32(-302 * 0.04)},
-		{float32(16 * 0.04), float32(58 * 0.04), float32(-164 * 0.04)},
-	})
+	validateFieldFunc(t, got, "Accels", []AccelReading{{22, -126, -354}, {78, 18, -302}, {16, 58, -164}})
 	validateFieldFunc(t, got, "Moving", true)
 	validateFieldFunc(t, got, "GP", float32(1012.98))
 }
@@ -327,7 +319,5 @@ func TestParse_IRS02RG(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC4D010000002400FCFE22074B58")
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iRS02RG")
-	validateFieldFunc(t, got, "Accel", AccelReading{
-		float32(0 * 0.04), float32(36 * 0.04), float32(-260 * 0.04),
-	})
+	validateFieldFunc(t, got, "Accel", AccelReading{0, 36, -260})
 }
