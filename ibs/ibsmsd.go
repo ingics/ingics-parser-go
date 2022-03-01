@@ -63,7 +63,7 @@ var evtMasks = map[string]uint8{
 
 func (pkt Payload) ibs() bool {
 	if mfg, ok := pkt.VendorCode(); ok {
-		msd := pkt.packet.ManufacturerData()
+		msd := pkt.Packet.ManufacturerData()
 		code := binary.LittleEndian.Uint16(msd[2:4])
 		if mfg == 0x59 && code == 0xBC80 {
 			// iBS01(H/G/T)

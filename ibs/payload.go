@@ -12,7 +12,7 @@ import (
 // BLE payload including MSD parsing result
 type Payload struct {
 	// The ble/adv.Packet instense
-	packet adv.Packet
+	Packet adv.Packet
 	// The manufacturer specified data array
 	msdata map[string]interface{}
 }
@@ -28,22 +28,22 @@ func Parse(bytes []byte) *Payload {
 
 // Wrap to adv.Packet's ManufacturerData method
 func (payload Payload) ManufacturerData() []byte {
-	return payload.packet.ManufacturerData()
+	return payload.Packet.ManufacturerData()
 }
 
 // Wrap to adv.Packet's ServiceData method
 func (payload Payload) ServiceData() []ble.ServiceData {
-	return payload.packet.ServiceData()
+	return payload.Packet.ServiceData()
 }
 
 // Wrap to adv.Packet's LocalName method
 func (payload Payload) LocalName() (string, bool) {
 	// 0x08: shortened local name
 	// 0x09: complete local name
-	if b := payload.packet.Field(0x08); b != nil {
+	if b := payload.Packet.Field(0x08); b != nil {
 		return string(b), true
 	}
-	if b := payload.packet.Field(0x09); b != nil {
+	if b := payload.Packet.Field(0x09); b != nil {
 		return string(b), true
 	}
 	return "", false

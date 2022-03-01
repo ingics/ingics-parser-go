@@ -53,8 +53,8 @@ func TestParse_IBeacon(t *testing.T) {
 	t.Run("Packet", func(t *testing.T) {
 		uuid, _ := ble.Parse("E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")
 		want, _ := adv.NewPacket(adv.Flags(6), adv.IBeacon(uuid, 0, 0, -59))
-		if !reflect.DeepEqual(&got.packet, want) {
-			t.Errorf("adv.Packet = %v, want %v", &got.packet, want)
+		if !reflect.DeepEqual(&got.Packet, want) {
+			t.Errorf("adv.Packet = %v, want %v", &got.Packet, want)
 		}
 	})
 	validateFieldFunc(t, got, "Vendor", "Apple, Inc.")
@@ -320,4 +320,14 @@ func TestParse_IRS02RG(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iRS02RG")
 	validateFieldFunc(t, got, "Accel", AccelReading{0, 36, -260})
+}
+
+func TestParse_CfgService(t *testing.T) {
+	uuid := []byte{0x2B, 0x32, 0x64, 0xB4, 0x1C, 0x6D, 0x1A, 0x84, 0xBD, 0x46, 0x98, 0xB2, 0x00, 0x00, 0x4E, 0x1B}
+	payload, _ := hex.DecodeString("11072B3264B41C6D1A84BD4698B200004E1B0B0969425330352D44384242")
+	got := Parse(payload)
+	// fmt.Printf("%s\n", got.Packet.UUIDs())
+	if !ble.Contains(got.Packet.UUIDs(), uuid) {
+		t.Errorf("INGICS tag configuration service not found")
+	}
 }
