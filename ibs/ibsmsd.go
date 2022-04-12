@@ -422,6 +422,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 // Parse the payload follow the input definition
 func (pkt Payload) parsePayload(def payloadDef) bool {
 	// define field handlers
+	pkt.msdata[fieldVendor] = knownVendorCode[IngicsVendorCode]
 	var fieldDefs = map[string]func(string, int) int{
 		fieldBattery:     pkt.handleFloatField,
 		fieldTemperature: pkt.handleFloatField,
