@@ -292,6 +292,16 @@ func TestParse_IBS05T(t *testing.T) {
 	validateFieldFunc(t, got, "Humidity", nil)
 }
 
+func TestParse_IWS01(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC4A0100A10A3100000039000000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iWS01")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.3))
+	validateFieldFunc(t, got, "ButtonPressed", false)
+	validateFieldFunc(t, got, "Temperature", float32(27.21))
+	validateFieldFunc(t, got, "Humidity", 49)
+}
+
 func TestParse_IBS05G(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF2C0883BC290102AAAAFFFF000033000000")
 	got := Parse(payload)
