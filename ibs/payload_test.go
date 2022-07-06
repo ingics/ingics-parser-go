@@ -349,3 +349,27 @@ func TestParse_CfgService(t *testing.T) {
 		t.Errorf("INGICS tag configuration service not found")
 	}
 }
+
+func TestParse_IBS07(t *testing.T) {
+	payload, _ := hex.DecodeString("02010618FF2C0887BC330100110B31005A002AFF02007B0050070000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS07")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.07))
+	validateFieldFunc(t, got, "Temperature", float32(28.33))
+	validateFieldFunc(t, got, "Humidity", 49)
+	validateFieldFunc(t, got, "Lux", 90)
+	validateFieldFunc(t, got, "Accel", AccelReading{-214, 2, 123})
+	validateFieldFunc(t, got, "ButtonPressed", false)
+}
+
+func TestParse_IBS07_NoSensor(t *testing.T) {
+	payload, _ := hex.DecodeString("02010618FF2C0887BC330101AAAAFFFF00002AFF02007B0050070000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS07")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.07))
+	validateFieldFunc(t, got, "Temperature", nil)
+	validateFieldFunc(t, got, "Humidity", nil)
+	validateFieldFunc(t, got, "Lux", 0)
+	validateFieldFunc(t, got, "Accel", AccelReading{-214, 2, 123})
+	validateFieldFunc(t, got, "ButtonPressed", true)
+}

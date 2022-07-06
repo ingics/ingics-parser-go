@@ -25,6 +25,7 @@ const (
 	fieldCO2         = "co2"
 	fieldAccel       = "accel"
 	fieldAccels      = "accels"
+	fieldLux         = "lux"
 	fieldUserData    = "userdata"
 	fieldEvents      = "events"
 	fieldSubtype     = "subtype"
@@ -78,10 +79,10 @@ func (pkt Payload) ibs() bool {
 			return pkt.parsePayload(rgPayloadDef)
 		} else if code == 0xBC82 {
 			// iBS02 for RS
-			return pkt.parsePayloadBySubtype(rsPayloadDefs)
+			return pkt.parsePayloadBySubtype(13, rsPayloadDefs)
 		} else if mfg == 0x0D && code == 0xBC83 {
 			// iBS02/iBS03/iBS04 common payload
-			return pkt.parsePayloadBySubtype(ibsCommonPayloadDefs)
+			return pkt.parsePayloadBySubtype(13, ibsCommonPayloadDefs)
 		} else if mfg == 0x0D && code == 0x0BC85 {
 			// iBS03GP
 			var gpPayloadDef = payloadDef{
@@ -92,7 +93,10 @@ func (pkt Payload) ibs() bool {
 			return pkt.parsePayload(gpPayloadDef)
 		} else if mfg == 0x082C && code == 0xBC83 {
 			// iBS05/iBS06
-			return pkt.parsePayloadBySubtype(ibsCommonPayloadDefs)
+			return pkt.parsePayloadBySubtype(13, ibsCommonPayloadDefs)
+		} else if mfg == 0x082C && code == 0xBC87 {
+			// iBS07
+			return pkt.parsePayloadBySubtype(19, ibsCommonPayloadDefs)
 		}
 	}
 	return false
@@ -125,7 +129,7 @@ func (pkt Payload) ibs01() bool {
 				}
 				return true
 			} else {
-				return pkt.parsePayloadBySubtype(ibs01PayloadDefs)
+				return pkt.parsePayloadBySubtype(13, ibs01PayloadDefs)
 			}
 		}
 	}
@@ -427,6 +431,11 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
+	0x50: {
+		"iBS07",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
+		[]string{evtButton},
+	},
 }
 
 // Parse the payload follow the input definition
@@ -451,6 +460,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldGP:          pkt.handleGpField,
 		fieldBattAct:     pkt.handleBattActField,
 		fieldRsEvents:    pkt.handleRsEventsField,
+		fieldLux:         pkt.handleIntField,
 	}
 
 	if model, ok := def.model.(string); ok {
@@ -474,10 +484,10 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 
 // Parse the payload by checkout 'subtype' first
 // Will find definition by subtype in the input 'payloadDefs'
-func (pkt Payload) parsePayloadBySubtype(payloadDefs map[byte]payloadDef) bool {
+func (pkt Payload) parsePayloadBySubtype(subTypeIdx int, payloadDefs map[byte]payloadDef) bool {
 	msd := pkt.ManufacturerData()
 	pkt.msdata[fieldVendor] = knownVendorCode[IngicsVendorCode]
-	subtype := uint8(msd[13])
+	subtype := uint8(msd[subTypeIdx])
 	if def, ok := payloadDefs[subtype]; ok {
 		return pkt.parsePayload(def)
 	}

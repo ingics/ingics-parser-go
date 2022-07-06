@@ -237,6 +237,15 @@ func (payload Payload) Accels() (reading []AccelReading, ok bool) {
 	return []AccelReading{}, false
 }
 
+// return lux reading
+func (payload Payload) Lux() (reading int, ok bool) {
+	if v, ok := payload.readingInt(fieldLux); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
 // Stringer interface for Payload
 func (payload Payload) String() string {
 	var x []string
