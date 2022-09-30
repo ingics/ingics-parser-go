@@ -210,6 +210,15 @@ func TestParse_IBS03RG(t *testing.T) {
 	validateFieldFunc(t, got, "Accels", []AccelReading{{10, -12, -256}, {22, -10, -256}, {20, -10, -248}})
 }
 
+func TestParse_IBS05RG(t *testing.T) {
+	payload, _ := hex.DecodeString("02010619FF2C0881BC3E110A00F4FF00FF1600F6FF00FF1400F6FF08FF")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS05RG")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.18))
+	validateFieldFunc(t, got, "Moving", true)
+	validateFieldFunc(t, got, "Accels", []AccelReading{{10, -12, -256}, {22, -10, -256}, {20, -10, -248}})
+}
+
 func TestParse_IBS03TP(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC280100D809060A640017040000")
 	got := Parse(payload)

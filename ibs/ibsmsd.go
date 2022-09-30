@@ -239,15 +239,15 @@ func (pkt Payload) handleRsEventsField(name string, index int) int {
 }
 
 // special handler for RG models,
-// returns model name determine by mfg code and type
+// returns model name determine by mfg code
 func (pkt Payload) rgNaming() string {
 	if mfg, ok := pkt.VendorCode(); ok {
-		msd := pkt.ManufacturerData()
-		typ := binary.LittleEndian.Uint16(msd[2:4])
 		if mfg == 0x59 {
 			return "iBS01RG"
-		} else if typ == 0xBC81 {
+		} else if mfg == 0x0D {
 			return "iBS03RG"
+		} else if mfg == 0x082C {
+			return "iBS05RG"
 		}
 	}
 	return "iBSXXRG"
