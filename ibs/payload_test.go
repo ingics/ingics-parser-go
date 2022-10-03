@@ -211,7 +211,7 @@ func TestParse_IBS03RG(t *testing.T) {
 }
 
 func TestParse_IBS05RG(t *testing.T) {
-	payload, _ := hex.DecodeString("02010619FF2C0881BC3E110A00F4FF00FF1600F6FF00FF1400F6FF08FF")
+	payload, _ := hex.DecodeString("0201061BFF2C0886BC3E110A00F4FF00FF1600F6FF00FF1400F6FF08FF1704")
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS05RG")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.18))

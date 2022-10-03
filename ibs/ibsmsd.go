@@ -91,6 +91,14 @@ func (pkt Payload) ibs() bool {
 				[]string{},
 			}
 			return pkt.parsePayload(gpPayloadDef)
+		} else if mfg == 0x082C && code == 0x0BC86 {
+			// iBS05RG
+			var gpPayloadDef = payloadDef{
+				"iBS05RG",
+				[]string{fieldBattAct, fieldAccels},
+				[]string{},
+			}
+			return pkt.parsePayload(gpPayloadDef)
 		} else if mfg == 0x082C && code == 0xBC83 {
 			// iBS05/iBS06
 			return pkt.parsePayloadBySubtype(13, ibsCommonPayloadDefs)
@@ -246,8 +254,6 @@ func (pkt Payload) rgNaming() string {
 			return "iBS01RG"
 		} else if mfg == 0x0D {
 			return "iBS03RG"
-		} else if mfg == 0x082C {
-			return "iBS05RG"
 		}
 	}
 	return "iBSXXRG"
