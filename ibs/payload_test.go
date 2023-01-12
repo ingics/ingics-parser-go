@@ -266,6 +266,13 @@ func TestParse_IBS03GP(t *testing.T) {
 	validateFieldFunc(t, got, "GP", float32(1012.98))
 }
 
+func TestParse_IBS03F(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF0D0083BC290140AAAA000000001B090000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS03F")
+	validateFieldFunc(t, got, "DinTriggered", true)
+}
+
 func TestParse_IBS04(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC3A0101AAAAFFFF000019070000")
 	got := Parse(payload)
