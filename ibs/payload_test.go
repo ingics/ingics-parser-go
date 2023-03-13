@@ -391,11 +391,11 @@ func TestParse_IBS07_NoSensor(t *testing.T) {
 }
 
 func TestParse_IBS08(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC380140C0086608000048080400")
+	payload, _ := hex.DecodeString("02010612FF2C0883BC380120C0086608000048080400")
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS08")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.12))
 	validateFieldFunc(t, got, "Temperature", float32(21.5))
 	validateFieldFunc(t, got, "TemperatureEnv", float32(22.4))
-	validateFieldFunc(t, got, "DinTriggered", true)
+	validateFieldFunc(t, got, "Detected", true)
 }

@@ -221,6 +221,11 @@ func (payload Payload) IRDetected() (value bool, ok bool) {
 	return payload.EventStat(evtIR)
 }
 
+// Return if IR sensor detected
+func (payload Payload) Detected() (value bool, ok bool) {
+	return payload.EventStat(evtDetect)
+}
+
 // Return if external dim triggered
 func (payload Payload) DinTriggered() (value bool, ok bool) {
 	return payload.EventStat(evtDin)
