@@ -137,6 +137,11 @@ func (payload Payload) TemperatureExt() (value float32, ok bool) {
 	return payload.readingFloat(fieldTempExt)
 }
 
+// Return external temperature sensor reading (in C)
+func (payload Payload) TemperatureEnv() (value float32, ok bool) {
+	return payload.readingFloat(fieldTempEnv)
+}
+
 // Return humidity sensor reading (in %)
 func (payload Payload) Humidity() (value int, ok bool) {
 	if v, ok := payload.readingInt(fieldHumidity); ok {

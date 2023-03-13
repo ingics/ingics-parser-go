@@ -19,6 +19,7 @@ const (
 	fieldTemperature = "temperature"
 	fieldHumidity    = "humidity"
 	fieldTempExt     = "temperatureExt"
+	fieldTempEnv     = "temperatureEnv"
 	fieldRange       = "range"
 	fieldGP          = "gp"
 	fieldCounter     = "counter"
@@ -447,6 +448,11 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
 		[]string{evtButton},
 	},
+	0x48: {
+		"iBS08",
+		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
+		[]string{evtDin},
+	},
 }
 
 // Parse the payload follow the input definition
@@ -457,6 +463,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldBattery:     pkt.handleFloatField,
 		fieldTemperature: pkt.handleFloatField,
 		fieldTempExt:     pkt.handleFloatField,
+		fieldTempEnv:     pkt.handleFloatField,
 		fieldHumidity:    pkt.handleIntField,
 		fieldSubtype:     pkt.handleByteField,
 		fieldEvents:      pkt.handleByteField,
