@@ -143,12 +143,8 @@ func (payload Payload) TemperatureEnv() (value float32, ok bool) {
 }
 
 // Return humidity sensor reading (in %)
-func (payload Payload) Humidity() (value int, ok bool) {
-	if v, ok := payload.readingInt(fieldHumidity); ok {
-		return int(v), true
-	} else {
-		return 0, false
-	}
+func (payload Payload) Humidity() (value float32, ok bool) {
+	return payload.readingFloat(fieldHumidity)
 }
 
 // Return range sensor reading (in %)

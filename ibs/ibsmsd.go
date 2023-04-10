@@ -17,7 +17,8 @@ const (
 	fieldVendor      = "vendor"
 	fieldBattery     = "battery"
 	fieldTemperature = "temperature"
-	fieldHumidity    = "humidity"
+	fieldHumidity    = "humidity"   // 1% resolution (integer) most cases
+	fieldHumidity1D  = "humidity1D" // 0.1% resolution for iWS01
 	fieldTempExt     = "temperatureExt"
 	fieldTempEnv     = "temperatureEnv"
 	fieldRange       = "range"
@@ -153,6 +154,10 @@ func (pkt Payload) handleIntField(name string, index int) int {
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
 	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
 		pkt.msdata[name] = int16(unsignedValue)
+		// special handling for humidity, convert to float
+		if name == fieldHumidity {
+			pkt.msdata[name] = float32(pkt.msdata[name].(int16))
+		}
 	}
 	return index + 2
 }
@@ -162,6 +167,19 @@ func (pkt Payload) handleUintField(name string, index int) int {
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
 	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
 		pkt.msdata[name] = unsignedValue
+	}
+	return index + 2
+}
+
+func (pkt Payload) handle1DFloatField(name string, index int) int {
+	msd := pkt.ManufacturerData()
+	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
+	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
+		// special handling for iWS01 humidity, to reuse field name 'humidity'
+		if name == fieldHumidity1D {
+			name = fieldHumidity
+		}
+		pkt.msdata[name] = float32(int16(unsignedValue)) / 10.0
 	}
 	return index + 2
 }
@@ -438,7 +456,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 	},
 	0x39: {
 		"iWS01",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldUserData},
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldUserData},
 		[]string{evtButton},
 	},
 	0x40: {
@@ -468,6 +486,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldTempExt:     pkt.handleFloatField,
 		fieldTempEnv:     pkt.handleFloatField,
 		fieldHumidity:    pkt.handleIntField,
+		fieldHumidity1D:  pkt.handle1DFloatField,
 		fieldSubtype:     pkt.handleByteField,
 		fieldEvents:      pkt.handleByteField,
 		fieldAccel:       pkt.handleAccelField,
