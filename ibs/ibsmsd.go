@@ -317,17 +317,17 @@ var ibs01PayloadDefs = map[byte]payloadDef{
 
 var rsPayloadDefs = map[byte]payloadDef{
 	0x01: {
-		"iBS02PIR-RS",
+		"iBS02PIR2-RS",
 		[]string{fieldBattery, fieldRsEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
 	0x02: {
-		"iBS02IR-RS",
+		"iBS02IR2-RS",
 		[]string{fieldBattery, fieldRsEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
 	0x04: {
-		"iBS02HM",
+		"iBS02M2-RS",
 		[]string{fieldBattery, fieldRsEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
