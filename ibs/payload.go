@@ -222,9 +222,14 @@ func (payload Payload) Detected() (value bool, ok bool) {
 	return payload.EventStat(evtDetect)
 }
 
-// Return if external dim triggered
+// Return if external din triggered
 func (payload Payload) DinTriggered() (value bool, ok bool) {
 	return payload.EventStat(evtDin)
+}
+
+// Return if external din2 triggered
+func (payload Payload) Din2Triggered() (value bool, ok bool) {
+	return payload.EventStat(evtDin2)
 }
 
 // Return accel readings

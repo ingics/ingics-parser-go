@@ -46,14 +46,16 @@ const (
 	evtIR     = "ir"
 	evtDetect = "detect"
 	evtDin    = "din"
+	evtDin2   = "din2"
 	bitButton = 0
 	bitMoving = 1
 	bitHall   = 2
 	bitFall   = 3
 	bitPIR    = 4
 	bitIR     = 5
-	bitDetect = 5
+	bitDetect = 5 // for iBS08
 	bitDin    = 6
+	bitDin2   = 3 // for iBS03QY
 )
 
 var evtMasks = map[string]uint8{
@@ -403,6 +405,16 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		"iBS03F",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldCounter, fieldUserData},
 		[]string{evtDin},
+	},
+	0x1C: {
+		"iBS03Q",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldCounter, fieldUserData},
+		[]string{evtDin},
+	},
+	0x1D: {
+		"iBS03QY",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldCounter, fieldUserData},
+		[]string{evtDin, evtDin2},
 	},
 	0x20: {
 		"iRS02",
