@@ -257,6 +257,15 @@ func (payload Payload) Lux() (reading int, ok bool) {
 	}
 }
 
+// return user data
+func (payload Payload) UserData() (reading int, ok bool) {
+	if v, ok := payload.readingInt(fieldUserData); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
 // Stringer interface for Payload
 func (payload Payload) String() string {
 	var x []string
