@@ -431,6 +431,11 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldAccel},
 		[]string{evtHall},
 	},
+	0x23: {
+		"iBS03NT",
+		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldTempExt, fieldUserData},
+		[]string{},
+	},
 	0x30: {
 		"iBS05",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
