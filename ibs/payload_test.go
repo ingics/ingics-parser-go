@@ -291,6 +291,13 @@ func TestParse_IBS03QY(t *testing.T) {
 	validateFieldFunc(t, got, "BatteryVoltage", float32(3.07))
 	validateFieldFunc(t, got, "Counter", 10)
 	validateFieldFunc(t, got, "DinTriggered", true)
+	payload2, _ := hex.DecodeString("02010612FF0D0083BC330108AAAA0A0000001D090000")
+	got2 := Parse(payload2)
+	validateFieldFunc(t, got2, "ProductModel", "iBS03QY")
+	validateFieldFunc(t, got2, "BatteryVoltage", float32(3.07))
+	validateFieldFunc(t, got2, "Counter", 10)
+	validateFieldFunc(t, got2, "DinTriggered", false)
+	validateFieldFunc(t, got2, "Din2Triggered", true)
 }
 
 func TestParse_IBS04(t *testing.T) {

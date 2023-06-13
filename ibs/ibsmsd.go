@@ -67,6 +67,7 @@ var evtMasks = map[string]uint8{
 	evtIR:     uint8(1 << bitIR),
 	evtDetect: uint8(1 << bitDetect),
 	evtDin:    uint8(1 << bitDin),
+	evtDin2:   uint8(1 << bitDin2),
 }
 
 func (pkt Payload) ibs() bool {
