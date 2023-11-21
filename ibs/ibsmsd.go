@@ -35,6 +35,7 @@ const (
 	fieldReserved2   = "reserved2"
 	fieldBattAct     = "battact"
 	fieldRsEvents    = "rsEvents"
+	fieldVoltage     = "voltage"
 )
 
 const (
@@ -437,6 +438,16 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldTempExt, fieldUserData},
 		[]string{},
 	},
+	0x24: {
+		"iBS03AD",
+		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldVoltage, fieldUserData},
+		[]string{},
+	},
+	0x25: {
+		"iBS03DI",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
+		[]string{evtDin},
+	},
 	0x30: {
 		"iBS05",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
@@ -519,6 +530,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldBattAct:     pkt.handleBattActField,
 		fieldRsEvents:    pkt.handleRsEventsField,
 		fieldLux:         pkt.handleIntField,
+		fieldVoltage:     pkt.handleIntField,
 	}
 
 	if model, ok := def.model.(string); ok {

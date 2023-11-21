@@ -446,3 +446,24 @@ func TestParse_IBS03NT(t *testing.T) {
 	validateFieldFunc(t, got, "TemperatureExt", float32(25.66))
 	validateFieldFunc(t, got, "UserData", int(100))
 }
+
+func TestParse_IBS03AD(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF0D0083BC280100AAAA060A640024040000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS03AD")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
+	validateFieldFunc(t, got, "Temperature", nil)
+	validateFieldFunc(t, got, "Voltage", 2566)
+	validateFieldFunc(t, got, "UserData", int(100))
+}
+
+func TestParse_IBS03DI(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF0D0083BC280140AAAA060A640025040000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS03DI")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
+	validateFieldFunc(t, got, "Temperature", nil)
+	validateFieldFunc(t, got, "Voltage", nil)
+	validateFieldFunc(t, got, "DinTriggered", true)
+	validateFieldFunc(t, got, "UserData", int(100))
+}

@@ -179,6 +179,15 @@ func (payload Payload) CO2() (value int, ok bool) {
 	}
 }
 
+// Return voltage sensor reading (in mV)
+func (payload Payload) Voltage() (value int, ok bool) {
+	if v, ok := payload.readingInt(fieldVoltage); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
 // Return event stat
 func (payload Payload) EventStat(evt string) (value bool, ok bool) {
 	if value, ok := payload.msdata[evt]; ok {
