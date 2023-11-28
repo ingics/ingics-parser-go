@@ -466,4 +466,5 @@ func TestParse_IBS03DI(t *testing.T) {
 	validateFieldFunc(t, got, "Voltage", nil)
 	validateFieldFunc(t, got, "DinTriggered", true)
 	validateFieldFunc(t, got, "UserData", int(100))
+	validateFieldFunc(t, got, "Counter", int(2566))
 }
