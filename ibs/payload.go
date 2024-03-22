@@ -188,6 +188,15 @@ func (payload Payload) Voltage() (value int, ok bool) {
 	}
 }
 
+// Return current sensor reading (in µA)
+func (payload Payload) Current() (value uint, ok bool) {
+	if v, ok := payload.readingUint(fieldCurrent); ok {
+		return uint(v), true
+	} else {
+		return 0, false
+	}
+}
+
 // Return event stat
 func (payload Payload) EventStat(evt string) (value bool, ok bool) {
 	if value, ok := payload.msdata[evt]; ok {

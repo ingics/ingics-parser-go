@@ -18,7 +18,7 @@ const (
 	fieldBattery     = "battery"
 	fieldTemperature = "temperature"
 	fieldHumidity    = "humidity"   // 1% resolution (integer) most cases
-	fieldHumidity1D  = "humidity1D" // 0.1% resolution for iWS01
+	fieldHumidity1D  = "humidity1D" // 0.1% resolution for iWS01/iBS08T
 	fieldTempExt     = "temperatureExt"
 	fieldTempEnv     = "temperatureEnv"
 	fieldRange       = "range"
@@ -36,6 +36,7 @@ const (
 	fieldBattAct     = "battact"
 	fieldRsEvents    = "rsEvents"
 	fieldVoltage     = "voltage"
+	fieldCurrent     = "current"
 )
 
 const (
@@ -434,19 +435,24 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{evtHall},
 	},
 	0x23: {
-		"iBS03NT",
+		"iBS03AD-NTC",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldTempExt, fieldUserData},
 		[]string{},
 	},
 	0x24: {
-		"iBS03AD",
+		"iBS03AD-V",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldVoltage, fieldUserData},
 		[]string{},
 	},
 	0x25: {
-		"iBS03DI",
+		"iBS03AD-D",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldCounter, fieldUserData},
 		[]string{evtDin},
+	},
+	0x26: {
+		"iBS03AD-A",
+		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldCurrent, fieldUserData},
+		[]string{},
 	},
 	0x30: {
 		"iBS05",
@@ -498,6 +504,26 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
 		[]string{evtButton},
 	},
+	0x41: {
+		"iBS08T",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldUserData},
+		[]string{evtButton},
+	},
+	0x42: {
+		"iBS08R",
+		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
+		[]string{},
+	},
+	0x43: {
+		"iBS08PS",
+		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
+		[]string{evtDetect},
+	},
+	0x44: {
+		"iBS08PIR",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
+		[]string{evtPIR},
+	},
 	0x48: {
 		"iBS08",
 		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
@@ -531,6 +557,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldRsEvents:    pkt.handleRsEventsField,
 		fieldLux:         pkt.handleIntField,
 		fieldVoltage:     pkt.handleIntField,
+		fieldCurrent:     pkt.handleUintField,
 	}
 
 	if model, ok := def.model.(string); ok {

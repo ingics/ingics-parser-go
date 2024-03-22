@@ -437,34 +437,81 @@ func TestParse_IBS08(t *testing.T) {
 	validateFieldFunc(t, got, "Detected", true)
 }
 
-func TestParse_IBS03NT(t *testing.T) {
+func TestParse_IBS03AD_NTC(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC280100AAAA060A640023040000")
 	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS03NT")
+	validateFieldFunc(t, got, "ProductModel", "iBS03AD-NTC")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
 	validateFieldFunc(t, got, "Temperature", nil)
 	validateFieldFunc(t, got, "TemperatureExt", float32(25.66))
 	validateFieldFunc(t, got, "UserData", int(100))
 }
 
-func TestParse_IBS03AD(t *testing.T) {
+func TestParse_IBS03AD_V(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC280100AAAA060A640024040000")
 	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS03AD")
+	validateFieldFunc(t, got, "ProductModel", "iBS03AD-V")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
 	validateFieldFunc(t, got, "Temperature", nil)
 	validateFieldFunc(t, got, "Voltage", 2566)
 	validateFieldFunc(t, got, "UserData", int(100))
 }
 
-func TestParse_IBS03DI(t *testing.T) {
+func TestParse_IBS03AD_D(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC280140AAAA060A640025040000")
 	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS03DI")
+	validateFieldFunc(t, got, "ProductModel", "iBS03AD-D")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
 	validateFieldFunc(t, got, "Temperature", nil)
 	validateFieldFunc(t, got, "Voltage", nil)
 	validateFieldFunc(t, got, "DinTriggered", true)
 	validateFieldFunc(t, got, "UserData", int(100))
 	validateFieldFunc(t, got, "Counter", int(2566))
+}
+
+func TestParse_IBS03AD_A(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF0D0083BC280140D809060A640026040000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS03AD-A")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
+	validateFieldFunc(t, got, "Current", uint(2566))
+	validateFieldFunc(t, got, "UserData", int(100))
+}
+
+func TestParse_IBS08T(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC4C0100CF080B02000041010C00")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS08T")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.32))
+	validateFieldFunc(t, got, "Temperature", float32(22.55))
+	validateFieldFunc(t, got, "Humidity", float32(52.3))
+	validateFieldFunc(t, got, "UserData", int(0))
+}
+
+func TestParse_IBS08R(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC280100AAAA7200000042090000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS08R")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
+	validateFieldFunc(t, got, "Range", int(114))
+	validateFieldFunc(t, got, "UserData", int(0))
+}
+
+func TestParse_IBS08PS(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC380120C0086608000043080400")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS08PS")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.12))
+	validateFieldFunc(t, got, "Temperature", float32(21.5))
+	validateFieldFunc(t, got, "TemperatureEnv", float32(22.4))
+	validateFieldFunc(t, got, "Detected", true)
+}
+
+func TestParse_IBS08PIR(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC4A0110AAAAFFFF000044040000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS08PIR")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.3))
+	validateFieldFunc(t, got, "ButtonPressed", nil)
+	validateFieldFunc(t, got, "PIRDetected", true)
 }
