@@ -157,7 +157,7 @@ func (pkt Payload) ibs01() bool {
 func (pkt Payload) handleIntField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
+	if unsignedValue != 0xAAAA {
 		pkt.msdata[name] = int16(unsignedValue)
 		// special handling for humidity, convert to float
 		if name == fieldHumidity {
@@ -167,24 +167,18 @@ func (pkt Payload) handleIntField(name string, index int) int {
 	return index + 2
 }
 
-func (pkt Payload) handleUintField(name string, index int) int {
+func (pkt Payload) handleUserDataField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
-		pkt.msdata[name] = unsignedValue
-	}
+	pkt.msdata[name] = int16(unsignedValue)
 	return index + 2
 }
 
-func (pkt Payload) handle1DFloatField(name string, index int) int {
+func (pkt Payload) handleUintField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
-		// special handling for iWS01 humidity, to reuse field name 'humidity'
-		if name == fieldHumidity1D {
-			name = fieldHumidity
-		}
-		pkt.msdata[name] = float32(int16(unsignedValue)) / 10.0
+	if unsignedValue != 0xFFFF {
+		pkt.msdata[name] = unsignedValue
 	}
 	return index + 2
 }
@@ -192,8 +186,28 @@ func (pkt Payload) handle1DFloatField(name string, index int) int {
 func (pkt Payload) handleFloatField(name string, index int) int {
 	msd := pkt.ManufacturerData()
 	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
-	if unsignedValue != 0xFFFF && unsignedValue != 0xAAAA {
+	if unsignedValue != 0xAAAA {
 		pkt.msdata[name] = float32(int16(unsignedValue)) / 100.0
+	}
+	return index + 2
+}
+
+func (pkt Payload) handleHumidity(name string, index int) int {
+	pkt.handleUintField(name, index)
+	if v, ok := pkt.msdata[name].(uint16); ok {
+		pkt.msdata[name] = float32(int16(v))
+	} else {
+		delete(pkt.msdata, name)
+	}
+	return index + 2
+}
+
+func (pkt Payload) handleHumidity1D(name string, index int) int {
+	pkt.handleUintField(fieldHumidity, index)
+	if v, ok := pkt.msdata[fieldHumidity].(uint16); ok {
+		pkt.msdata[fieldHumidity] = float32(int16(v)) / 10.0
+	} else {
+		delete(pkt.msdata, fieldHumidity)
 	}
 	return index + 2
 }
@@ -540,8 +554,8 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldTemperature: pkt.handleFloatField,
 		fieldTempExt:     pkt.handleFloatField,
 		fieldTempEnv:     pkt.handleFloatField,
-		fieldHumidity:    pkt.handleIntField,
-		fieldHumidity1D:  pkt.handle1DFloatField,
+		fieldHumidity:    pkt.handleHumidity,
+		fieldHumidity1D:  pkt.handleHumidity1D,
 		fieldSubtype:     pkt.handleByteField,
 		fieldEvents:      pkt.handleByteField,
 		fieldAccel:       pkt.handleAccelField,
@@ -549,7 +563,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldRange:       pkt.handleIntField,
 		fieldCO2:         pkt.handleUintField,
 		fieldCounter:     pkt.handleUintField,
-		fieldUserData:    pkt.handleIntField,
+		fieldUserData:    pkt.handleUserDataField,
 		fieldReserved:    pkt.handleReservedField,
 		fieldReserved2:   pkt.handleReserved2Field,
 		fieldGP:          pkt.handleGpField,
