@@ -275,6 +275,15 @@ func (payload Payload) Lux() (reading int, ok bool) {
 	}
 }
 
+// return value field
+func (payload Payload) Value() (reading uint, ok bool) {
+	if v, ok := payload.readingUint(fieldValue); ok {
+		return uint(v), true
+	} else {
+		return 0, false
+	}
+}
+
 // return user data
 func (payload Payload) UserData() (reading int, ok bool) {
 	if v, ok := payload.readingInt(fieldUserData); ok {

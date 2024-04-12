@@ -37,6 +37,7 @@ const (
 	fieldRsEvents    = "rsEvents"
 	fieldVoltage     = "voltage"
 	fieldCurrent     = "current"
+	fieldValue       = "value"
 )
 
 const (
@@ -530,7 +531,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 	},
 	0x43: {
 		"iBS08PS",
-		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
+		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldUserData},
 		[]string{evtDetect},
 	},
 	0x44: {
@@ -572,6 +573,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldLux:         pkt.handleIntField,
 		fieldVoltage:     pkt.handleIntField,
 		fieldCurrent:     pkt.handleUintField,
+		fieldValue:       pkt.handleUintField,
 	}
 
 	if model, ok := def.model.(string); ok {
