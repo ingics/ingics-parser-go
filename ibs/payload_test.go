@@ -40,6 +40,26 @@ func validateFieldFunc(t *testing.T, got *Payload, field string, want interface{
 	})
 }
 
+type TestCaseField struct {
+	name   string
+	expect interface{}
+}
+
+type TestCase struct {
+	payload string
+	fields  []TestCaseField
+}
+
+func runTestCases(t *testing.T, cases []TestCase) {
+	for _, v := range cases {
+		payload, _ := hex.DecodeString(v.payload)
+		got := Parse(payload)
+		for _, f := range v.fields {
+			validateFieldFunc(t, got, f.name, f.expect)
+		}
+	}
+}
+
 func TestParse_Windows10(t *testing.T) {
 	payload, _ := hex.DecodeString("1EFF06000109200236444DA103B7448CE1A6E2220F1E9AB734C9348A35B53B")
 	got := Parse(payload)
@@ -479,39 +499,69 @@ func TestParse_IBS03AD_A(t *testing.T) {
 }
 
 func TestParse_IBS08T(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC4C0100CF080B02000041010C00")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS08T")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(3.32))
-	validateFieldFunc(t, got, "Temperature", float32(22.55))
-	validateFieldFunc(t, got, "Humidity", float32(52.3))
-	validateFieldFunc(t, got, "UserData", int(0))
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC4C0100CF080B02000041010C00",
+			[]TestCaseField{
+				{"ProductModel", "iBS08T"},
+				{"BatteryVoltage", float32(3.32)},
+				{"Temperature", float32(22.55)},
+				{"Humidity", float32(52.3)},
+				{"UserData", int(0)},
+			},
+		},
+	})
 }
 
 func TestParse_IBS08R(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC280100AAAA7200000042090000")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS08R")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
-	validateFieldFunc(t, got, "Range", int(114))
-	validateFieldFunc(t, got, "UserData", int(0))
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC280100AAAA7200000042090000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08R"},
+				{"BatteryVoltage", float32(2.96)},
+				{"Range", int(114)},
+				{"UserData", int(0)},
+			},
+		},
+	})
 }
 
 func TestParse_IBS08PS(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC1E012021071E00000043010100,1712909022.670")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS08PS")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(2.86))
-	validateFieldFunc(t, got, "Value", int(1825))
-	validateFieldFunc(t, got, "Counter", int(30))
-	validateFieldFunc(t, got, "Detected", true)
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC1E012021071E00000043010100",
+			[]TestCaseField{
+				{"ProductModel", "iBS08PS"},
+				{"BatteryVoltage", float32(2.86)},
+				{"Value", int(1825)},
+				{"Counter", int(30)},
+				{"Detected", true},
+			},
+		},
+		{
+			"02010612FF2C0883BC170100B2FF1800000043010100",
+			[]TestCaseField{
+				{"ProductModel", "iBS08PS"},
+				{"BatteryVoltage", float32(2.79)},
+				{"Value", int(-78)},
+				{"Counter", int(24)},
+				{"Detected", false},
+			},
+		},
+	})
 }
 
 func TestParse_IBS08PIR(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC4A0110AAAAFFFF000044040000")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS08PIR")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(3.3))
-	validateFieldFunc(t, got, "ButtonPressed", nil)
-	validateFieldFunc(t, got, "PIRDetected", true)
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC4A0110AAAAFFFF000044040000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08PIR"},
+				{"BatteryVoltage", float32(3.3)},
+				{"ButtonPressed", nil},
+				{"PIRDetected", true},
+			},
+		},
+	})
 }
