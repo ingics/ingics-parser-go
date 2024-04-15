@@ -502,7 +502,7 @@ func TestParse_IBS08PS(t *testing.T) {
 	got := Parse(payload)
 	validateFieldFunc(t, got, "ProductModel", "iBS08PS")
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.86))
-	validateFieldFunc(t, got, "Value", uint(1825))
+	validateFieldFunc(t, got, "Value", int(1825))
 	validateFieldFunc(t, got, "Counter", int(30))
 	validateFieldFunc(t, got, "Detected", true)
 }

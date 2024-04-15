@@ -573,7 +573,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldLux:         pkt.handleIntField,
 		fieldVoltage:     pkt.handleIntField,
 		fieldCurrent:     pkt.handleUintField,
-		fieldValue:       pkt.handleUintField,
+		fieldValue:       pkt.handleIntField,
 	}
 
 	if model, ok := def.model.(string); ok {
