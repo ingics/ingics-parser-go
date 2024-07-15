@@ -513,12 +513,12 @@ func TestParse_IBS08T(t *testing.T) {
 	})
 }
 
-func TestParse_IBS08R(t *testing.T) {
+func TestParse_IBS09R(t *testing.T) {
 	runTestCases(t, []TestCase{
 		{
 			"02010612FF2C0883BC280100AAAA7200000042090000",
 			[]TestCaseField{
-				{"ProductModel", "iBS08R"},
+				{"ProductModel", "iBS09R"},
 				{"BatteryVoltage", float32(2.96)},
 				{"Range", int(114)},
 				{"UserData", int(0)},
@@ -527,12 +527,12 @@ func TestParse_IBS08R(t *testing.T) {
 	})
 }
 
-func TestParse_IBS08PS(t *testing.T) {
+func TestParse_IBS09PS(t *testing.T) {
 	runTestCases(t, []TestCase{
 		{
 			"02010612FF2C0883BC1E012021071E00000043010100",
 			[]TestCaseField{
-				{"ProductModel", "iBS08PS"},
+				{"ProductModel", "iBS09PS"},
 				{"BatteryVoltage", float32(2.86)},
 				{"Value", int(1825)},
 				{"Counter", int(30)},
@@ -542,7 +542,7 @@ func TestParse_IBS08PS(t *testing.T) {
 		{
 			"02010612FF2C0883BC170100B2FF1800000043010100",
 			[]TestCaseField{
-				{"ProductModel", "iBS08PS"},
+				{"ProductModel", "iBS09PS"},
 				{"BatteryVoltage", float32(2.79)},
 				{"Value", int(-78)},
 				{"Counter", int(24)},
@@ -552,15 +552,29 @@ func TestParse_IBS08PS(t *testing.T) {
 	})
 }
 
-func TestParse_IBS08PIR(t *testing.T) {
+func TestParse_IBS09PIR(t *testing.T) {
 	runTestCases(t, []TestCase{
 		{
 			"02010612FF2C0883BC4A0110AAAAFFFF000044040000",
 			[]TestCaseField{
-				{"ProductModel", "iBS08PIR"},
+				{"ProductModel", "iBS09PIR"},
 				{"BatteryVoltage", float32(3.3)},
 				{"ButtonPressed", nil},
 				{"PIRDetected", true},
+			},
+		},
+	})
+}
+
+func TestParse_IBS09LX(t *testing.T) {
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC280100AAAA7200000045090000",
+			[]TestCaseField{
+				{"ProductModel", "iBS09LX"},
+				{"BatteryVoltage", float32(2.96)},
+				{"Lux", int(114)},
+				{"UserData", int(0)},
 			},
 		},
 	})

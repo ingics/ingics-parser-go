@@ -525,19 +525,24 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{evtButton},
 	},
 	0x42: {
-		"iBS08R",
+		"iBS09R",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
-		[]string{},
+		[]string{evtButton},
 	},
 	0x43: {
-		"iBS08PS",
+		"iBS09PS",
 		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldUserData},
 		[]string{evtDetect},
 	},
 	0x44: {
-		"iBS08PIR",
+		"iBS09PIR",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{evtPIR},
+	},
+	0x45: {
+		"iBS09LX",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldLux, fieldUserData},
+		[]string{evtButton},
 	},
 	0x48: {
 		"iBS08",
