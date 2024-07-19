@@ -114,8 +114,8 @@ func (pkt Payload) ibs() bool {
 			// iBS05/iBS06
 			return pkt.parsePayloadBySubtype(13, ibsCommonPayloadDefs)
 		} else if mfg == 0x082C && code == 0xBC87 {
-			// iBS07
-			return pkt.parsePayloadBySubtype(19, ibsCommonPayloadDefs)
+			// iBS07/iBS08/iBS09/(iWS01)
+			return pkt.parsePayloadBySubtype(19, ibsBC87PayloadDefs)
 		}
 	}
 	return false
@@ -504,50 +504,86 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{evtButton},
 	},
-	0x39: {
-		"iWS01",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2},
-		[]string{evtButton},
-	},
 	0x40: {
 		"iBS06",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
-	0x50: {
-		"iBS07",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
-		[]string{evtButton},
-	},
+	// deprecated
 	0x41: {
 		"iBS08T",
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldUserData},
 		[]string{evtButton},
 	},
+	// deprecated
 	0x42: {
 		"iBS09R",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
 		[]string{evtButton},
 	},
+	// deprecated
 	0x43: {
 		"iBS09PS",
 		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldUserData},
 		[]string{evtDetect},
 	},
+	// deprecated
 	0x44: {
 		"iBS09PIR",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{evtPIR},
 	},
+	// deprecated
 	0x45: {
 		"iBS09LX",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldLux, fieldUserData},
 		[]string{evtButton},
 	},
+	// deprecated
 	0x48: {
 		"iBS08",
 		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
 		[]string{evtDetect},
+	},
+}
+
+// product ID BC87
+var ibsBC87PayloadDefs = map[byte]payloadDef{
+	0x50: {
+		"iBS07",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
+		[]string{evtButton},
+	},
+	// deprecated
+	0x39: {
+		"iWS01",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2},
+		[]string{evtButton},
+	},
+	0x41: {
+		"iBS08T",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtButton},
+	},
+	0x42: {
+		"iBS09R",
+		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtButton},
+	},
+	0x43: {
+		"iBS09PS",
+		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtDetect},
+	},
+	0x44: {
+		"iBS09PIR",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtPIR},
+	},
+	0x45: {
+		"iBS09LX",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtButton},
 	},
 }
 
