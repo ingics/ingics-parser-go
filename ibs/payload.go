@@ -22,7 +22,10 @@ type Payload struct {
 func Parse(bytes []byte) *Payload {
 	pkt := adv.NewRawPacket(bytes)
 	payload := Payload{*pkt, map[string]interface{}{}}
-	payload.ibs() // call ibs parser
+	ok := payload.ibs() // call ibs parser
+	if !ok {
+		payload.apple() // call apple parser
+	}
 	return &payload
 }
 
@@ -290,6 +293,42 @@ func (payload Payload) UserData() (reading int, ok bool) {
 		return int(v), true
 	} else {
 		return 0, false
+	}
+}
+
+// return major number of iBeacon
+func (payload Payload) Major() (reading uint, ok bool) {
+	if v, ok := payload.readingUint("major"); ok {
+		return uint(v), true
+	} else {
+		return 0, false
+	}
+}
+
+// return minor number of iBeacon
+func (payload Payload) Minor() (reading uint, ok bool) {
+	if v, ok := payload.readingUint("minor"); ok {
+		return uint(v), true
+	} else {
+		return 0, false
+	}
+}
+
+// return tx power of iBeacon
+func (payload Payload) TxPower() (reading int, ok bool) {
+	if v, ok := payload.readingInt("txpower"); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
+// return UUID of iBeacon
+func (payload Payload) UUID() (reading []byte, ok bool) {
+	if v, ok := payload.msdata["uuid"]; ok {
+		return v.([]byte), true
+	} else {
+		return []byte{}, false
 	}
 }
 

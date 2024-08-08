@@ -565,3 +565,18 @@ func TestParse_IBS09LX(t *testing.T) {
 		},
 	})
 }
+
+func TestParser_iBeacon(t *testing.T) {
+	runTestCases(t, []TestCase{
+		{
+			"0201061AFF4C000215B9A5D27D56CC4E3AAB511F2153BCB9670000E9B2D6",
+			[]TestCaseField{
+				{"Vendor", "Apple, Inc."},
+				{"ProductModel", "iBeacon"},
+				{"Major", uint(0)},
+				{"Minor", uint(0xB2E9)},
+				{"TxPower", int(-42)},
+			},
+		},
+	})
+}
