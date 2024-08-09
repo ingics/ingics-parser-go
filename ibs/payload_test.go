@@ -574,7 +574,7 @@ func TestParser_iBeacon(t *testing.T) {
 				{"Vendor", "Apple, Inc."},
 				{"ProductModel", "iBeacon"},
 				{"Major", uint(0)},
-				{"Minor", uint(0xB2E9)},
+				{"Minor", uint(0xE9B2)},
 				{"TxPower", int(-42)},
 			},
 		},
