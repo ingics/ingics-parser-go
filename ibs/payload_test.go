@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-ble/ble"
 	"github.com/go-ble/ble/linux/adv"
+	"github.com/google/uuid"
 )
 
 func validateFieldFunc(t *testing.T, got *Payload, field string, want interface{}) {
@@ -567,6 +568,7 @@ func TestParse_IBS09LX(t *testing.T) {
 }
 
 func TestParser_iBeacon(t *testing.T) {
+	ProximityUUIDs, _ := uuid.MustParse("B9A5D27D56CC4E3AAB511F2153BCB967").MarshalBinary()
 	runTestCases(t, []TestCase{
 		{
 			"0201061AFF4C000215B9A5D27D56CC4E3AAB511F2153BCB9670000E9B2D6",
@@ -575,7 +577,8 @@ func TestParser_iBeacon(t *testing.T) {
 				{"ProductModel", "iBeacon"},
 				{"Major", uint(0)},
 				{"Minor", uint(0xE9B2)},
-				{"TxPower", int(-42)},
+				{"RefTx", int(-42)},
+				{"UUID", ProximityUUIDs},
 			},
 		},
 	})

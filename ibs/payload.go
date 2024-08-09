@@ -314,9 +314,9 @@ func (payload Payload) Minor() (reading uint, ok bool) {
 	}
 }
 
-// return tx power of iBeacon
-func (payload Payload) TxPower() (reading int, ok bool) {
-	if v, ok := payload.readingInt("txpower"); ok {
+// return reference tx power of iBeacon
+func (payload Payload) RefTx() (reading int, ok bool) {
+	if v, ok := payload.readingInt("ref_tx"); ok {
 		return int(v), true
 	} else {
 		return 0, false

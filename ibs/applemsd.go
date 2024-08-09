@@ -11,7 +11,7 @@ func (pkt Payload) apple() bool {
 		pkt.msdata["uuid"] = msd[4:20]
 		pkt.msdata["major"] = binary.BigEndian.Uint16(msd[20:22])
 		pkt.msdata["minor"] = binary.BigEndian.Uint16(msd[22:24])
-		pkt.msdata["txpower"] = int16(int8(msd[24]))
+		pkt.msdata["ref_tx"] = int16(int8(msd[24]))
 		return true
 	}
 	return false
