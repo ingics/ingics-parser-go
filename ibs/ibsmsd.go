@@ -581,8 +581,8 @@ var ibsBC87PayloadDefs = map[byte]payloadDef{
 		[]string{evtPIR},
 	},
 	0x45: {
-		"iBS09LX",
-		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2},
+		"iBS08TL",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2},
 		[]string{evtButton},
 	},
 }

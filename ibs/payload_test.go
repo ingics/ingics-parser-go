@@ -501,6 +501,16 @@ func TestParse_IBS08T(t *testing.T) {
 				{"ButtonPressed", false},
 			},
 		},
+		{
+			"02010618FF2C0887BCE600016E281300000000000000000041000000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08T"},
+				{"BatteryVoltage", float32(2.3)},
+				{"Temperature", float32(103.5)},
+				{"Humidity", float32(1.9)},
+				{"ButtonPressed", true},
+			},
+		},
 	})
 }
 
@@ -551,17 +561,40 @@ func TestParse_IBS09PIR(t *testing.T) {
 				{"PIRDetected", true},
 			},
 		},
+		{
+			"02010618FF2C0887BCFA0000AAAAFFFF000000000000000044100000",
+			[]TestCaseField{
+				{"ProductModel", "iBS09PIR"},
+				{"BatteryVoltage", float32(2.50)},
+				{"ButtonPressed", nil},
+				{"PIRDetected", false},
+			},
+		},
 	})
 }
 
-func TestParse_IBS09LX(t *testing.T) {
+func TestParse_IBS08TL(t *testing.T) {
 	runTestCases(t, []TestCase{
 		{
-			"02010618FF2C0887BC470110AAAAFFFF010200000000000045100000",
+			"02010618FF2C0887BC4701010B0BA301010200000000000045100000",
 			[]TestCaseField{
-				{"ProductModel", "iBS09LX"},
+				{"ProductModel", "iBS08TL"},
 				{"BatteryVoltage", float32(3.27)},
+				{"Temperature", float32(28.27)},
+				{"Humidity", float32(41.9)},
 				{"Lux", int(513)},
+				{"ButtonPressed", true},
+			},
+		},
+		{
+			"02010618FF2C0887BC2001006E281300B90700000000000045100000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08TL"},
+				{"BatteryVoltage", float32(2.88)},
+				{"Temperature", float32(103.5)},
+				{"Humidity", float32(1.9)},
+				{"Lux", int(1977)},
+				{"ButtonPressed", false},
 			},
 		},
 	})
