@@ -270,9 +270,9 @@ func (payload Payload) Accels() (reading []AccelReading, ok bool) {
 }
 
 // return lux reading
-func (payload Payload) Lux() (reading int, ok bool) {
-	if v, ok := payload.readingInt(fieldLux); ok {
-		return int(v), true
+func (payload Payload) Lux() (reading uint, ok bool) {
+	if v, ok := payload.readingUint(fieldLux); ok {
+		return uint(v), true
 	} else {
 		return 0, false
 	}

@@ -611,7 +611,7 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldGP:          pkt.handleGpField,
 		fieldBattAct:     pkt.handleBattActField,
 		fieldRsEvents:    pkt.handleRsEventsField,
-		fieldLux:         pkt.handleIntField,
+		fieldLux:         pkt.handleUintField,
 		fieldVoltage:     pkt.handleIntField,
 		fieldCurrent:     pkt.handleUintField,
 		fieldValue:       pkt.handleIntField,
