@@ -38,6 +38,10 @@ const (
 	fieldVoltage     = "voltage"
 	fieldCurrent     = "current"
 	fieldValue       = "value"
+	fieldPm2p5       = "pm2p5"
+	fieldPm10p0      = "pm10p0"
+	fieldVoc         = "voc"
+	fieldNox         = "nox"
 )
 
 const (
@@ -212,6 +216,15 @@ func (pkt Payload) handleHumidity1D(name string, index int) int {
 		pkt.msdata[fieldHumidity] = float32(int16(v)) / 10.0
 	} else {
 		delete(pkt.msdata, fieldHumidity)
+	}
+	return index + 2
+}
+
+func (pkt Payload) handleUint1DField(name string, index int) int {
+	msd := pkt.ManufacturerData()
+	unsignedValue := binary.LittleEndian.Uint16(msd[index : index+2])
+	if unsignedValue != 0xFFFF {
+		pkt.msdata[name] = float32(int16(unsignedValue)) / 10.0
 	}
 	return index + 2
 }
@@ -595,7 +608,7 @@ var ibsBC87PayloadDefs = map[byte]payloadDef{
 	},
 }
 
-// product ID BC87
+// product ID BC88
 var ibsBC88PayloadDefs = map[byte]payloadDef{
 	0x41: {
 		"iBS08T",
@@ -620,6 +633,11 @@ var ibsBC88PayloadDefs = map[byte]payloadDef{
 	0x45: {
 		"iBS08TL",
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtButton},
+	},
+	0x46: {
+		"iBS08IAQ",
+		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldCO2, fieldPm2p5, fieldPm10p0, fieldVoc, fieldNox},
 		[]string{evtButton},
 	},
 }
@@ -652,6 +670,10 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldVoltage:     pkt.handleIntField,
 		fieldCurrent:     pkt.handleUintField,
 		fieldValue:       pkt.handleIntField,
+		fieldPm2p5:       pkt.handleUint1DField,
+		fieldPm10p0:      pkt.handleUint1DField,
+		fieldVoc:         pkt.handleUint1DField,
+		fieldNox:         pkt.handleUint1DField,
 	}
 
 	if model, ok := def.model.(string); ok {

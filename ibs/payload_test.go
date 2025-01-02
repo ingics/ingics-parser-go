@@ -733,6 +733,41 @@ func TestParse_IBS08TL(t *testing.T) {
 	})
 }
 
+func TestParse_IBS08IAQ(t *testing.T) {
+	runTestCases(t, []TestCase{
+		{
+			"0201061AFF2C0888BC4901000F091F025A0232004C00DE030A0046040000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08IAQ"},
+				{"BatteryVoltage", float32(3.29)},
+				{"Temperature", float32(23.19)},
+				{"Humidity", float32(54.3)},
+				{"CO2", 602},
+				{"PM2p5", float32(5.0)},
+				{"PM10p0", float32(7.6)},
+				{"VOC", float32(99.0)},
+				{"NOx", float32(1.0)},
+				{"ButtonPressed", false},
+			},
+		},
+		{
+			"0201061AFF2C0888BC4701001A091C02FFFFFFFFFFFF0000FFFF46041000",
+			[]TestCaseField{
+				{"ProductModel", "iBS08IAQ"},
+				{"BatteryVoltage", float32(3.27)},
+				{"Temperature", float32(23.30)},
+				{"Humidity", float32(54.0)},
+				{"CO2", nil},
+				{"PM2p5", nil},
+				{"PM10p0", nil},
+				{"VOC", float32(0)},
+				{"NOx", nil},
+				{"ButtonPressed", false},
+			},
+		},
+	})
+}
+
 func TestParser_iBeacon(t *testing.T) {
 	ProximityUUIDs, _ := uuid.MustParse("B9A5D27D56CC4E3AAB511F2153BCB967").MarshalBinary()
 	runTestCases(t, []TestCase{

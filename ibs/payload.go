@@ -278,6 +278,26 @@ func (payload Payload) Lux() (reading uint, ok bool) {
 	}
 }
 
+// return pm2.5 reading
+func (payload Payload) PM2p5() (reading float32, ok bool) {
+	return payload.readingFloat(fieldPm2p5)
+}
+
+// return pm10 reading
+func (payload Payload) PM10p0() (reading float32, ok bool) {
+	return payload.readingFloat(fieldPm10p0)
+}
+
+// return VOC reading
+func (payload Payload) VOC() (reading float32, ok bool) {
+	return payload.readingFloat(fieldVoc)
+}
+
+// return NOx reading
+func (payload Payload) NOx() (reading float32, ok bool) {
+	return payload.readingFloat(fieldNox)
+}
+
 // return value field
 func (payload Payload) Value() (reading int, ok bool) {
 	if v, ok := payload.readingInt(fieldValue); ok {
