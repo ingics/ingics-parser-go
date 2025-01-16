@@ -346,6 +346,28 @@ func TestParse_IBS05(t *testing.T) {
 	validateFieldFunc(t, got, "ButtonPressed", true)
 }
 
+func TestParse_IBS05H(t *testing.T) {
+	payload, _ := hex.DecodeString("02010612FF2C0883BC2D0100AAAA04000000310A1000")
+	got := Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS05H")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.01))
+	validateFieldFunc(t, got, "ButtonPressed", false)
+	validateFieldFunc(t, got, "HallDetected", false)
+	payload, _ = hex.DecodeString("02010612FF2C0883BC2D0101AAAA04000000310A1000")
+	got = Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS05H")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.01))
+	validateFieldFunc(t, got, "ButtonPressed", true)
+	validateFieldFunc(t, got, "HallDetected", false)
+	payload, _ = hex.DecodeString("02010612FF2C0883BC2D0104AAAA01800000310A1000")
+	got = Parse(payload)
+	validateFieldFunc(t, got, "ProductModel", "iBS05H")
+	validateFieldFunc(t, got, "BatteryVoltage", float32(3.01))
+	validateFieldFunc(t, got, "Counter", 32769)
+	validateFieldFunc(t, got, "ButtonPressed", false)
+	validateFieldFunc(t, got, "HallDetected", true)
+}
+
 func TestParse_IBS05T(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF2C0883BC4A0100A10AFFFF000032000000")
 	got := Parse(payload)
