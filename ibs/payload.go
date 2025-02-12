@@ -360,3 +360,30 @@ func (payload Payload) String() string {
 	}
 	return fmt.Sprintf("{ %v }", strings.Join(x, ", "))
 }
+
+// return aux1 field
+func (payload Payload) Aux1() (reading int, ok bool) {
+	if v, ok := payload.readingInt(fieldAux1); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
+// return aux1 field
+func (payload Payload) Aux2() (reading int, ok bool) {
+	if v, ok := payload.readingInt(fieldAux2); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}
+
+// return aux1 field
+func (payload Payload) Aux3() (reading int, ok bool) {
+	if v, ok := payload.readingInt(fieldAux3); ok {
+		return int(v), true
+	} else {
+		return 0, false
+	}
+}

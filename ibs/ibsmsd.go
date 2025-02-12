@@ -42,6 +42,9 @@ const (
 	fieldPm10p0      = "pm10p0"
 	fieldVoc         = "voc"
 	fieldNox         = "nox"
+	fieldAux1        = "aux1"
+	fieldAux2        = "aux2"
+	fieldAux3        = "aux3"
 )
 
 const (
@@ -622,7 +625,7 @@ var ibsBC88PayloadDefs = map[byte]payloadDef{
 	},
 	0x43: {
 		"iBS09PS",
-		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldReserved2, fieldAux1, fieldReserved2, fieldReserved2, fieldReserved2},
 		[]string{evtDetect},
 	},
 	0x44: {
@@ -674,6 +677,9 @@ func (pkt Payload) parsePayload(def payloadDef) bool {
 		fieldPm10p0:      pkt.handleUint1DField,
 		fieldVoc:         pkt.handleUint1DField,
 		fieldNox:         pkt.handleUint1DField,
+		fieldAux1:        pkt.handleIntField,
+		fieldAux2:        pkt.handleIntField,
+		fieldAux3:        pkt.handleIntField,
 	}
 
 	if model, ok := def.model.(string); ok {
