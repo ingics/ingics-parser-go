@@ -387,3 +387,8 @@ func (payload Payload) Aux3() (reading int, ok bool) {
 		return 0, false
 	}
 }
+
+// return flip event stat
+func (payload Payload) Flip() (reading bool, ok bool) {
+	return payload.EventStat(evtFlip)
+}

@@ -397,6 +397,29 @@ func TestParse_IBS05G(t *testing.T) {
 	validateFieldFunc(t, got, "Moving", true)
 }
 
+func TestParse_IBS05G_Flip(t *testing.T) {
+	runTestCases(t, []TestCase{
+		{
+			"02010612FF2C0883BC3C012002FF000000003A0A1000",
+			[]TestCaseField{
+				{"ProductModel", "iBS05G-Flip"},
+				{"BatteryVoltage", float32(3.16)},
+				{"ButtonPressed", false},
+				{"Flip", true},
+			},
+		},
+		{
+			"02010612FF2C0883BC3A0101F200000000003A0A1000",
+			[]TestCaseField{
+				{"ProductModel", "iBS05G-Flip"},
+				{"BatteryVoltage", float32(3.14)},
+				{"ButtonPressed", true},
+				{"Flip", false},
+			},
+		},
+	})
+}
+
 func TestParse_IBS05CO2(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF2C0883BC270100AAAA6804000034010000")
 	got := Parse(payload)

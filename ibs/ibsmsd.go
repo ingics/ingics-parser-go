@@ -57,6 +57,7 @@ const (
 	evtDetect = "detect"
 	evtDin    = "din"
 	evtDin2   = "din2"
+	evtFlip   = "flip"
 	bitButton = 0
 	bitMoving = 1
 	bitHall   = 2
@@ -66,6 +67,7 @@ const (
 	bitDetect = 5 // for iBS08
 	bitDin    = 6
 	bitDin2   = 3 // for iBS03QY
+	bitFlip   = 5 // for iBs05G_Flip
 )
 
 var evtMasks = map[string]uint8{
@@ -78,6 +80,7 @@ var evtMasks = map[string]uint8{
 	evtDetect: uint8(1 << bitDetect),
 	evtDin:    uint8(1 << bitDin),
 	evtDin2:   uint8(1 << bitDin2),
+	evtFlip:   uint8(1 << bitFlip),
 }
 
 func (pkt Payload) ibs() bool {
@@ -522,6 +525,11 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		"iBS06i",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{evtButton},
+	},
+	0x3A: {
+		"iBS05G-Flip",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
+		[]string{evtButton, evtFlip},
 	},
 	0x40: {
 		"iBS06",
