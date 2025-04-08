@@ -546,7 +546,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 	0x42: {
 		"iBS09R",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
-		[]string{evtButton, evtDetect},
+		[]string{evtButton},
 	},
 	// deprecated
 	0x43: {
@@ -628,8 +628,8 @@ var ibsBC88PayloadDefs = map[byte]payloadDef{
 	},
 	0x42: {
 		"iBS09R",
-		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtButton},
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldRange, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
+		[]string{evtButton, evtDetect},
 	},
 	0x43: {
 		"iBS09PS",

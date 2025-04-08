@@ -689,6 +689,16 @@ func TestParse_IBS09R(t *testing.T) {
 				{"ProductModel", "iBS09R"},
 				{"BatteryVoltage", float32(3.27)},
 				{"Range", int(116)},
+				{"Detected", false},
+			},
+		},
+		{
+			"0201061AFF2C0888BC470120AAAA74000000000000000000000042100000",
+			[]TestCaseField{
+				{"ProductModel", "iBS09R"},
+				{"BatteryVoltage", float32(3.27)},
+				{"Range", int(116)},
+				{"Detected", true},
 			},
 		},
 	})
