@@ -546,7 +546,7 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 	0x42: {
 		"iBS09R",
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
-		[]string{evtButton},
+		[]string{evtButton, evtDetect},
 	},
 	// deprecated
 	0x43: {
