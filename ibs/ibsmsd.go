@@ -536,42 +536,6 @@ var ibsCommonPayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldReserved2, fieldUserData},
 		[]string{},
 	},
-	// deprecated
-	0x41: {
-		"iBS08T",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldUserData},
-		[]string{evtButton},
-	},
-	// deprecated
-	0x42: {
-		"iBS09R",
-		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldUserData},
-		[]string{evtButton},
-	},
-	// deprecated
-	0x43: {
-		"iBS09PS",
-		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldUserData},
-		[]string{evtDetect},
-	},
-	// deprecated
-	0x44: {
-		"iBS09PIR",
-		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldUserData},
-		[]string{evtPIR},
-	},
-	// deprecated
-	0x45: {
-		"iBS09LX",
-		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldLux, fieldUserData},
-		[]string{evtButton},
-	},
-	// deprecated
-	0x48: {
-		"iBS08",
-		[]string{fieldBattery, fieldEvents, fieldTempEnv, fieldTemperature, fieldUserData},
-		[]string{evtDetect},
-	},
 }
 
 // product ID BC87
@@ -581,51 +545,10 @@ var ibsBC87PayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity, fieldLux, fieldAccel},
 		[]string{evtButton},
 	},
-	// deprecated, for backward compatibility
-	0x39: {
-		"iWS01",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2},
-		[]string{evtButton},
-	},
-	// deprecated, for backward compatibility, use BC88 instead
-	0x41: {
-		"iBS08T",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtButton},
-	},
-	// deprecated, for backward compatibility, use BC88 instead
-	0x42: {
-		"iBS09R",
-		[]string{fieldBattery, fieldReserved, fieldReserved2, fieldRange, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtButton},
-	},
-	// deprecated, for backward compatibility, use BC88 instead
-	0x43: {
-		"iBS09PS",
-		[]string{fieldBattery, fieldEvents, fieldValue, fieldCounter, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtDetect},
-	},
-	// deprecated, for backward compatibility, use BC88 instead
-	0x44: {
-		"iBS09PIR",
-		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtPIR},
-	},
-	// deprecated, for backward compatibility, use BC88 instead
-	0x45: {
-		"iBS08TL",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtButton},
-	},
 }
 
 // product ID BC88
 var ibsBC88PayloadDefs = map[byte]payloadDef{
-	0x41: {
-		"iBS08T",
-		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
-		[]string{evtButton},
-	},
 	0x42: {
 		"iBS09R",
 		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldRange, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
@@ -642,7 +565,7 @@ var ibsBC88PayloadDefs = map[byte]payloadDef{
 		[]string{evtPIR},
 	},
 	0x45: {
-		"iBS08TL",
+		"iBS08T",
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldLux, fieldReserved2, fieldReserved2, fieldReserved2, fieldReserved2},
 		[]string{evtButton},
 	},

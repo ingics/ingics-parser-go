@@ -378,16 +378,6 @@ func TestParse_IBS05T(t *testing.T) {
 	validateFieldFunc(t, got, "Humidity", nil)
 }
 
-func TestParse_IWS01(t *testing.T) {
-	payload, _ := hex.DecodeString("02010618FF2C0887BC4A0100A10A3100000000000000000039000000")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iWS01")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(3.3))
-	validateFieldFunc(t, got, "ButtonPressed", false)
-	validateFieldFunc(t, got, "Temperature", float32(27.21))
-	validateFieldFunc(t, got, "Humidity", float32(4.9))
-}
-
 func TestParse_IBS05G(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF2C0883BC290102AAAAFFFF000033000000")
 	got := Parse(payload)
@@ -483,16 +473,6 @@ func TestParse_IBS07_NoSensor(t *testing.T) {
 	validateFieldFunc(t, got, "ButtonPressed", true)
 }
 
-func TestParse_IBS08(t *testing.T) {
-	payload, _ := hex.DecodeString("02010612FF2C0883BC380120C0086608000048080400")
-	got := Parse(payload)
-	validateFieldFunc(t, got, "ProductModel", "iBS08")
-	validateFieldFunc(t, got, "BatteryVoltage", float32(3.12))
-	validateFieldFunc(t, got, "Temperature", float32(21.5))
-	validateFieldFunc(t, got, "TemperatureEnv", float32(22.4))
-	validateFieldFunc(t, got, "Detected", true)
-}
-
 func TestParse_IBS03AD_NTC(t *testing.T) {
 	payload, _ := hex.DecodeString("02010612FF0D0083BC280100AAAA060A640023040000")
 	got := Parse(payload)
@@ -532,153 +512,6 @@ func TestParse_IBS03AD_A(t *testing.T) {
 	validateFieldFunc(t, got, "BatteryVoltage", float32(2.96))
 	validateFieldFunc(t, got, "Current", uint(2566))
 	validateFieldFunc(t, got, "UserData", int(100))
-}
-
-func TestParse_IBS08T_BC87(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"02010618FF2C0887BC2C01000B0BA301000000000000000041000000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08T"},
-				{"BatteryVoltage", float32(3)},
-				{"Temperature", float32(28.27)},
-				{"Humidity", float32(41.9)},
-				{"ButtonPressed", false},
-			},
-		},
-		{
-			"02010618FF2C0887BCE600016E281300000000000000000041000000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08T"},
-				{"BatteryVoltage", float32(2.3)},
-				{"Temperature", float32(103.5)},
-				{"Humidity", float32(1.9)},
-				{"ButtonPressed", true},
-			},
-		},
-	})
-}
-
-func TestParse_IBS09R_BC87(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"02010618FF2C0887BC470100AAAA7400000000000000000042100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS09R"},
-				{"BatteryVoltage", float32(3.27)},
-				{"Range", int(116)},
-			},
-		},
-	})
-}
-
-func TestParse_IBS09PS_BC87(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"02010618FF2C0887BC470120AAAA0100000000000000000043100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS09PS"},
-				{"BatteryVoltage", float32(3.27)},
-				{"Counter", int(1)},
-				{"Detected", true},
-			},
-		},
-		{
-			"02010618FF2C0887BC470100AAAA0000000000000000000043100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS09PS"},
-				{"BatteryVoltage", float32(3.27)},
-				{"Counter", int(0)},
-				{"Detected", false},
-			},
-		},
-	})
-}
-
-func TestParse_IBS09PIR_BC87(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"02010618FF2C0887BC470110AAAAFFFF000000000000000044100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS09PIR"},
-				{"BatteryVoltage", float32(3.27)},
-				{"ButtonPressed", nil},
-				{"PIRDetected", true},
-			},
-		},
-		{
-			"02010618FF2C0887BCFA0000AAAAFFFF000000000000000044100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS09PIR"},
-				{"BatteryVoltage", float32(2.50)},
-				{"ButtonPressed", nil},
-				{"PIRDetected", false},
-			},
-		},
-	})
-}
-
-func TestParse_IBS08TL_BC87(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"02010618FF2C0887BC4701010B0BA301010200000000000045100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
-				{"BatteryVoltage", float32(3.27)},
-				{"Temperature", float32(28.27)},
-				{"Humidity", float32(41.9)},
-				{"Lux", uint(513)},
-				{"ButtonPressed", true},
-			},
-		},
-		{
-			"02010618FF2C0887BC2001006E281300B90700000000000045100000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
-				{"BatteryVoltage", float32(2.88)},
-				{"Temperature", float32(103.5)},
-				{"Humidity", float32(1.9)},
-				{"Lux", uint(1977)},
-				{"ButtonPressed", false},
-			},
-		},
-		{
-			"02010618FF2C0887BC330100870DF501998200000000000045020900",
-			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
-				{"BatteryVoltage", float32(3.07)},
-				{"Temperature", float32(34.63)},
-				{"Humidity", float32(50.1)},
-				{"Lux", uint(33433)},
-				{"ButtonPressed", false},
-			},
-		},
-	})
-}
-
-func TestParse_IBS08T(t *testing.T) {
-	runTestCases(t, []TestCase{
-		{
-			"0201061AFF2C0888BC2C01000B0BA3010000000000000000000041000000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08T"},
-				{"BatteryVoltage", float32(3)},
-				{"Temperature", float32(28.27)},
-				{"Humidity", float32(41.9)},
-				{"ButtonPressed", false},
-			},
-		},
-		{
-			"0201061AFF2C0888BCE600016E2813000000000000000000000041000000",
-			[]TestCaseField{
-				{"ProductModel", "iBS08T"},
-				{"BatteryVoltage", float32(2.3)},
-				{"Temperature", float32(103.5)},
-				{"Humidity", float32(1.9)},
-				{"ButtonPressed", true},
-			},
-		},
-	})
 }
 
 func TestParse_IBS09R(t *testing.T) {
@@ -750,12 +583,12 @@ func TestParse_IBS09PIR(t *testing.T) {
 	})
 }
 
-func TestParse_IBS08TL(t *testing.T) {
+func TestParse_IBS08T(t *testing.T) {
 	runTestCases(t, []TestCase{
 		{
 			"0201061AFF2C0888BC4701010B0BA3010102000000000000000045100000",
 			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
+				{"ProductModel", "iBS08T"},
 				{"BatteryVoltage", float32(3.27)},
 				{"Temperature", float32(28.27)},
 				{"Humidity", float32(41.9)},
@@ -766,7 +599,7 @@ func TestParse_IBS08TL(t *testing.T) {
 		{
 			"0201061AFF2C0888BC2001006E281300B907000000000000000045100000",
 			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
+				{"ProductModel", "iBS08T"},
 				{"BatteryVoltage", float32(2.88)},
 				{"Temperature", float32(103.5)},
 				{"Humidity", float32(1.9)},
@@ -777,7 +610,7 @@ func TestParse_IBS08TL(t *testing.T) {
 		{
 			"0201061AFF2C0888BC330100870DF5019982000000000000000045020900",
 			[]TestCaseField{
-				{"ProductModel", "iBS08TL"},
+				{"ProductModel", "iBS08T"},
 				{"BatteryVoltage", float32(3.07)},
 				{"Temperature", float32(34.63)},
 				{"Humidity", float32(50.1)},
