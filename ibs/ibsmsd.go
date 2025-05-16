@@ -574,6 +574,11 @@ var ibsBC88PayloadDefs = map[byte]payloadDef{
 		[]string{fieldBattery, fieldEvents, fieldTemperature, fieldHumidity1D, fieldCO2, fieldPm2p5, fieldPm10p0, fieldVoc, fieldNox},
 		[]string{evtButton},
 	},
+	0x47: {
+		"iBS09IR",
+		[]string{fieldBattery, fieldEvents, fieldReserved2, fieldCounter, fieldReserved2, fieldValue, fieldReserved2, fieldReserved2},
+		[]string{evtButton, evtIR},
+	},
 }
 
 // Parse the payload follow the input definition

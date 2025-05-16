@@ -656,6 +656,31 @@ func TestParse_IBS08IAQ(t *testing.T) {
 	})
 }
 
+func TestParse_IBS09IR(t *testing.T) {
+	runTestCases(t, []TestCase{
+		{
+			"0201061AFF2C0888BC390120AAAAD1000000060000000000000047080000",
+			[]TestCaseField{
+				{"ProductModel", "iBS09IR"},
+				{"BatteryVoltage", float32(3.13)},
+				{"ButtonPressed", false},
+				{"IRDetected", true},
+				{"Counter", 209},
+			},
+		},
+		{
+			"0201061AFF2C0888BC390101AAAAD0000000040000000000000047080000",
+			[]TestCaseField{
+				{"ProductModel", "iBS09IR"},
+				{"BatteryVoltage", float32(3.13)},
+				{"ButtonPressed", true},
+				{"IRDetected", false},
+				{"Counter", 208},
+			},
+		},
+	})
+}
+
 func TestParser_iBeacon(t *testing.T) {
 	ProximityUUIDs, _ := uuid.MustParse("B9A5D27D56CC4E3AAB511F2153BCB967").MarshalBinary()
 	runTestCases(t, []TestCase{
